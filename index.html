@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#06b6d4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Private Lobby">
+<meta name="description" content="ND 2 Statistics First Semester Prospectus — Private Lobby Study App">
+<link rel="manifest" href="manifest.json">
+<title>Private Lobby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================================================
+   DESIGN TOKENS
+   ================================================ */
+:root {
+  --accent: #06b6d4;
+  --accent-dim: #0891b2;
+  --accent-soft: rgba(6,182,212,0.10);
+  --accent-soft2: rgba(6,182,212,0.18);
+  --border-accent: rgba(6,182,212,0.22);
+  --bg:      #111214;
+  --bg2:     #18191c;
+  --bg3:     #1e2025;
+  --surface: #1e2025;
+  --surface2:#252830;
+  --border:  rgba(255,255,255,0.07);
+  --text:    #eaedf0;
+  --text2:   #9099a4;
+  --text3:   #50565e;
+  --font-ui:   'Inter', sans-serif;
+  --font-head: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --fs-title:  22px;
+  --fs-section:17px;
+  --fs-body:   15px;
+  --fs-sub:    13px;
+  --fs-tiny:   11px;
+  --lh-body: 1.75;
+  --lh-tight: 1.35;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --nav-h: 62px;
+  --header-h: 54px;
+  --transition: 0.18s ease;
+}
+[data-theme="light"] {
+  --bg: #f4f5f7; --bg2: #ffffff; --bg3: #ebedf0;
+  --surface: #ffffff; --surface2: #f8f9fb;
+  --border: rgba(0,0,0,0.07);
+  --text: #111214; --text2: #454b52; --text3: #9099a4;
+}
+[data-color="violet"]  { --accent:#7c3aed; --accent-dim:#6d28d9; --accent-soft:rgba(124,58,237,0.09);  --accent-soft2:rgba(124,58,237,0.17);  --border-accent:rgba(124,58,237,0.22); }
+[data-color="emerald"] { --accent:#059669; --accent-dim:#047857; --accent-soft:rgba(5,150,105,0.09);   --accent-soft2:rgba(5,150,105,0.17);   --border-accent:rgba(5,150,105,0.22); }
+[data-color="rose"]    { --accent:#e11d48; --accent-dim:#be123c; --accent-soft:rgba(225,29,72,0.09);   --accent-soft2:rgba(225,29,72,0.17);   --border-accent:rgba(225,29,72,0.22); }
+[data-color="amber"]   { --accent:#d97706; --accent-dim:#b45309; --accent-soft:rgba(217,119,6,0.09);   --accent-soft2:rgba(217,119,6,0.17);   --border-accent:rgba(217,119,6,0.22); }
+[data-color="indigo"]  { --accent:#4f46e5; --accent-dim:#4338ca; --accent-soft:rgba(79,70,229,0.09);   --accent-soft2:rgba(79,70,229,0.17);   --border-accent:rgba(79,70,229,0.22); }
+[data-font="poppins"] { --font-ui:'Poppins',sans-serif; --font-head:'Poppins',sans-serif; }
+[data-font="roboto"]  { --font-ui:'Roboto',sans-serif;  --font-head:'Roboto',sans-serif;  }
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size:16px;-webkit-font-smoothing:antialiased;}
+#app{height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--accent-soft2);border-radius:3px;}
+
+/* ── HEADER ── */
+.app-header{
+  height:var(--header-h);min-height:var(--header-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--space-md);
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  z-index:50;flex-shrink:0;
+}
+.app-logo{
+  display:flex;align-items:center;gap:9px;
+  font-family:var(--font-head);font-size:20px;font-weight:800;
+  letter-spacing:-0.4px;color:var(--text);
+}
+.logo-mark{
+  width:30px;height:30px;border-radius:var(--radius-sm);
+  background:var(--accent);display:flex;align-items:center;
+  justify-content:center;font-size:15px;font-weight:800;
+  color:#fff;flex-shrink:0;font-family:var(--font-head);
+  letter-spacing:-1px;
+}
+.header-sub{
+  font-size:11px;color:var(--text3);font-weight:400;
+  letter-spacing:0.2px;line-height:1;margin-top:1px;
+}
+.header-logo-group{display:flex;flex-direction:column;gap:1px;}
+.icon-btn{
+  width:36px;height:36px;border-radius:var(--radius-sm);
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text2);display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:18px;
+  transition:var(--transition);flex-shrink:0;
+}
+.icon-btn:active{opacity:0.6;}
+
+/* ── SCROLL ── */
+.main-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + 12px);}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:var(--nav-h);background:var(--bg2);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;z-index:100;padding:0 4px;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:2px;padding:6px 2px;cursor:pointer;
+  border:none;background:none;color:var(--text3);
+  transition:var(--transition);font-family:var(--font-ui);
+}
+.nav-item.active{color:var(--accent);}
+.nav-icon{width:36px;height:26px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;transition:var(--transition);}
+.nav-item.active .nav-icon{background:var(--accent-soft);}
+.nav-label{font-size:10px;font-weight:500;}
+
+/* ── PAGES ── */
+.page{display:none;padding:var(--space-md);animation:pgIn 0.16s ease;}
+.page.active{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HOME HERO ── */
+.home-hero{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:18px;
+  margin-bottom:var(--space-md);overflow:hidden;position:relative;
+}
+.home-hero-top{height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-dim));border-radius:var(--radius-lg) var(--radius-lg) 0 0;position:absolute;top:0;left:0;right:0;}
+.hero-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.hero-title{font-family:var(--font-head);font-size:18px;font-weight:800;line-height:1.3;color:var(--text);margin-bottom:4px;}
+.hero-sub{font-size:13px;color:var(--text2);line-height:1.6;}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-xs);margin-bottom:var(--space-md);}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 8px;text-align:center;}
+.stat-num{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--accent);line-height:1;}
+.stat-label{font-size:11px;color:var(--text3);margin-top:3px;font-weight:500;}
+
+/* ── RECENTS ── */
+.section-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-xs);}
+.section-title{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);}
+.section-action{font-size:12px;color:var(--accent);font-weight:500;cursor:pointer;}
+.recents-scroll{
+  display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;
+  margin-bottom:var(--space-md);
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.recents-scroll::-webkit-scrollbar{display:none;}
+.recent-card{
+  flex-shrink:0;width:110px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-md);padding:12px 10px;
+  cursor:pointer;transition:var(--transition);
+  display:flex;flex-direction:column;gap:6px;
+  position:relative;overflow:hidden;
+}
+.recent-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--accent);border-radius:0 0 var(--radius-md) var(--radius-md);
+}
+.recent-card:active{opacity:0.7;}
+.recent-icon{font-size:20px;line-height:1;}
+.recent-code{font-family:var(--font-mono);font-size:10px;color:var(--accent);font-weight:600;letter-spacing:1px;}
+.recent-name{font-size:11px;color:var(--text);font-weight:500;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.recent-time{font-size:10px;color:var(--text3);}
+.recents-empty{
+  height:90px;display:flex;align-items:center;justify-content:center;
+  background:var(--surface);border:1px dashed var(--border);
+  border-radius:var(--radius-md);color:var(--text3);font-size:13px;
+  margin-bottom:var(--space-md);
+}
+
+/* ── COURSE CARDS ── */
+.course-list{display:flex;flex-direction:column;gap:var(--space-xs);}
+.course-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-md);padding:var(--space-md);
+  cursor:pointer;transition:var(--transition);
+  display:flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;
+}
+.course-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+.course-card:active{opacity:0.7;}
+.course-icon{width:42px;height:42px;border-radius:var(--radius-md);background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.course-info{flex:1;min-width:0;}
+.course-code{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.course-name{font-size:14px;font-weight:600;line-height:var(--lh-tight);color:var(--text);}
+.course-meta{font-size:12px;color:var(--text3);margin-top:2px;display:flex;gap:6px;}
+.course-arrow{color:var(--text3);font-size:18px;flex-shrink:0;}
+
+/* ── BACK BTN ── */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--accent);font-size:14px;font-weight:500;
+  cursor:pointer;padding:6px 0;margin-bottom:var(--space-sm);
+  background:none;border:none;font-family:var(--font-ui);
+}
+
+/* ── COURSE HEADER ── */
+.course-header-card{
+  background:var(--surface);border:1px solid var(--border-accent);
+  border-radius:var(--radius-lg);padding:var(--space-md);
+  margin-bottom:var(--space-md);
+}
+.course-header-code{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:600;letter-spacing:1.5px;margin-bottom:5px;}
+.course-header-title{font-family:var(--font-head);font-size:17px;font-weight:700;line-height:var(--lh-tight);margin-bottom:7px;color:var(--text);}
+.course-header-goal{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+.meta-row{display:flex;gap:var(--space-xs);flex-wrap:wrap;}
+.meta-badge{display:inline-flex;align-items:center;gap:4px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;}
+
+/* ── TOPIC LIST ── */
+.topics-grid{display:flex;flex-direction:column;gap:var(--space-xs);}
+.topic-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:13px var(--space-md);
+  cursor:pointer;transition:var(--transition);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topic-item:active{opacity:0.7;}
+.topic-num{font-family:var(--font-mono);font-size:10px;color:var(--accent);font-weight:600;margin-bottom:2px;letter-spacing:1px;}
+.topic-name{font-size:14px;font-weight:500;line-height:var(--lh-tight);color:var(--text);}
+.topic-right{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:8px;}
+.bookmark-btn{font-size:20px;color:var(--text3);cursor:pointer;padding:4px;background:none;border:none;}
+.bookmark-btn.saved{color:#f59e0b;}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:12px;color:var(--text3);margin-bottom:var(--space-md);}
+.breadcrumb-link{color:var(--accent);cursor:pointer;font-weight:500;}
+.breadcrumb-sep{opacity:0.4;}
+
+/* ── TOPIC DETAIL ── */
+.topic-header-card{background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius-lg);padding:var(--space-md);margin-bottom:12px;}
+.topic-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-soft2);color:var(--accent);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:9px;}
+.topic-title{font-family:var(--font-head);font-size:20px;font-weight:800;line-height:var(--lh-tight);color:var(--text);}
+
+.content-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:10px;}
+.content-section-title{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.content-body{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text2);}
+.content-body p{margin-bottom:10px;}
+.content-body p:last-child{margin-bottom:0;}
+.content-body ul{padding-left:18px;margin-bottom:8px;}
+.content-body li{margin-bottom:6px;}
+.content-body strong{color:var(--text);font-weight:600;}
+.content-body ol{padding-left:20px;margin-bottom:8px;}
+
+/* ── FORMULA BOX ── */
+.formula-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);margin:8px 0;overflow:hidden;}
+.formula-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);}
+.formula-label-text{font-size:12px;color:var(--text3);font-weight:500;flex:1;min-width:0;margin-right:8px;}
+.copy-btn{display:flex;align-items:center;gap:3px;background:var(--accent-soft);color:var(--accent);border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:var(--transition);white-space:nowrap;flex-shrink:0;}
+.copy-btn:active{opacity:0.7;}
+.copy-btn.copied{background:rgba(34,197,94,0.12);color:#22c55e;}
+.formula-text{font-family:var(--font-mono);font-size:13px;color:var(--accent);line-height:1.8;padding:10px 12px;white-space:pre-wrap;word-break:break-all;}
+
+/* ── EXAMPLE ── */
+.example-box{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:14px;}
+.example-text{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text2);}
+
+/* ── YOUTUBE BUTTON (pill) ── */
+.yt-btn{
+  display:flex;align-items:center;gap:9px;
+  background:#cc0000;color:#fff;border:none;
+  border-radius:30px;padding:13px 22px;
+  font-size:14px;font-weight:600;
+  cursor:pointer;text-decoration:none;
+  transition:var(--transition);width:100%;
+  justify-content:center;font-family:var(--font-ui);
+  box-shadow:0 2px 8px rgba(204,0,0,0.3);
+}
+.yt-btn:active{opacity:0.85;}
+.yt-icon{font-size:18px;}
+
+/* ── ACTION ROW ── */
+.topic-action-row{display:flex;gap:var(--space-xs);margin-top:4px;}
+.action-btn{flex:1;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);font-size:13px;cursor:pointer;font-family:var(--font-ui);font-weight:500;transition:var(--transition);}
+.action-btn.primary{background:var(--accent-soft);border-color:var(--border-accent);color:var(--accent);font-weight:600;}
+.action-btn:active{opacity:0.7;}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;margin-bottom:var(--space-md);}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:13px var(--space-md) 13px 42px;color:var(--text);font-size:var(--fs-body);font-family:var(--font-ui);outline:none;transition:var(--transition);}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--text3);}
+.search-icon-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text3);pointer-events:none;}
+.search-results{display:flex;flex-direction:column;gap:var(--space-xs);}
+.result-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px;cursor:pointer;transition:var(--transition);}
+.result-item:active{opacity:0.7;}
+.result-type{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
+.result-title{font-size:var(--fs-body);font-weight:500;color:var(--text);margin-bottom:2px;}
+.result-sub{font-size:12px;color:var(--text3);}
+.search-empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:var(--fs-body);}
+.search-empty-icon{font-size:40px;margin-bottom:10px;}
+
+/* ── BOOKMARKS ── */
+.empty-state{text-align:center;padding:56px 20px;}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.empty-title{font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:7px;color:var(--text);}
+.empty-sub{font-size:var(--fs-body);color:var(--text3);line-height:var(--lh-body);}
+
+/* ── FORMULA HUB ── */
+.fhub-course-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-md);margin-bottom:10px;
+  overflow:hidden;cursor:pointer;transition:var(--transition);
+}
+.fhub-course-card:active{opacity:0.8;}
+.fhub-course-header{
+  display:flex;align-items:center;gap:10px;
+  padding:13px var(--space-md);
+}
+.fhub-course-icon{font-size:18px;flex-shrink:0;}
+.fhub-course-code{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:700;letter-spacing:1.5px;}
+.fhub-course-name{font-size:13px;color:var(--text);font-weight:500;flex:1;}
+.fhub-count{font-size:11px;color:var(--accent);font-weight:600;background:var(--accent-soft);padding:2px 8px;border-radius:12px;}
+.fhub-chevron{color:var(--text3);font-size:16px;transition:var(--transition);}
+.fhub-course-card.open .fhub-chevron{transform:rotate(90deg);}
+
+/* Formula course detail page */
+.fhub-topic-block{margin-bottom:14px;}
+.fhub-topic-label{font-size:13px;font-weight:600;color:var(--text);padding:6px 0 6px var(--space-sm);margin-bottom:5px;border-left:2px solid var(--accent);padding-left:var(--space-sm);}
+.fhub-formula-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:5px;overflow:hidden;}
+.fhub-formula-name{font-size:12px;color:var(--text2);font-weight:500;padding:7px 12px 3px;display:flex;justify-content:space-between;align-items:center;}
+.fhub-formula-text{font-family:var(--font-mono);font-size:12px;color:var(--accent);line-height:1.6;padding:4px 12px 9px;white-space:pre-wrap;word-break:break-all;}
+.fhub-copy-btn{background:var(--accent-soft);color:var(--accent);border:none;border-radius:5px;padding:3px 8px;font-size:10px;font-weight:600;cursor:pointer;font-family:var(--font-ui);flex-shrink:0;transition:var(--transition);}
+.fhub-copy-btn.copied{background:rgba(34,197,94,0.12);color:#22c55e;}
+
+/* ── SETTINGS ── */
+.settings-section{margin-bottom:22px;}
+.settings-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.theme-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;gap:4px;}
+.theme-btn{flex:1;padding:9px;border-radius:var(--radius-sm);border:none;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition);color:var(--text2);background:transparent;font-family:var(--font-ui);}
+.theme-btn.active{background:var(--accent);color:#fff;}
+.color-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--space-xs);}
+.color-btn{aspect-ratio:1;border-radius:var(--radius-sm);border:2px solid transparent;cursor:pointer;transition:var(--transition);position:relative;display:flex;align-items:center;justify-content:center;}
+.color-btn.active{border-color:var(--text);}
+.color-btn.active::after{content:"✓";color:#fff;font-size:13px;font-weight:800;position:absolute;text-shadow:0 1px 2px rgba(0,0,0,0.5);}
+.color-btn:active{transform:scale(0.88);}
+.font-grid{display:flex;flex-direction:column;gap:var(--space-xs);}
+.font-btn{padding:13px var(--space-md);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);cursor:pointer;text-align:left;transition:var(--transition);font-family:var(--font-ui);}
+.font-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+.font-btn-name{font-size:var(--fs-body);font-weight:600;}
+.font-btn-sample{font-size:12px;color:var(--text3);margin-top:1px;}
+.reset-btn{width:100%;padding:13px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-md);color:#ef4444;font-size:var(--fs-body);font-weight:600;cursor:pointer;transition:var(--transition);font-family:var(--font-ui);}
+.reset-btn:active{opacity:0.7;}
+
+/* ── INSTALL BANNER ── */
+.install-banner{
+  display:none;margin:0 0 var(--space-md);
+  background:var(--accent-soft2);border:1px solid var(--border-accent);
+  border-radius:var(--radius-md);padding:12px var(--space-md);
+  align-items:center;gap:10px;
+}
+.install-banner.visible{display:flex;}
+.install-text{flex:1;font-size:13px;color:var(--text);line-height:1.4;}
+.install-text strong{color:var(--accent);}
+.install-btn{background:var(--accent);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);white-space:nowrap;flex-shrink:0;}
+.install-dismiss{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:2px;flex-shrink:0;}
+
+/* ── SIDEBAR ── */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:none;}
+.sidebar-overlay.open{display:block;animation:pgIn 0.16s ease;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:280px;background:var(--bg2);border-right:1px solid var(--border);z-index:201;transform:translateX(-100%);transition:transform 0.26s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;display:flex;flex-direction:column;}
+.sidebar.open{transform:translateX(0);}
+.sidebar-header{padding:18px var(--space-md) var(--space-md);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sidebar-title{font-family:var(--font-head);font-size:17px;font-weight:800;color:var(--text);}
+.sidebar-close{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;}
+.sidebar-course-item{padding:11px var(--space-md);cursor:pointer;border-bottom:1px solid var(--border);transition:var(--transition);}
+.sidebar-course-item:active{background:var(--accent-soft);}
+.sidebar-code{font-family:var(--font-mono);font-size:10px;color:var(--accent);font-weight:600;letter-spacing:1px;margin-bottom:2px;}
+.sidebar-name{font-size:13px;font-weight:500;line-height:var(--lh-tight);color:var(--text);}
+
+/* ── TOAST / GREETING ── */
+.toast{
+  position:fixed;bottom:calc(var(--nav-h) + 10px);left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:var(--bg2);border:1px solid var(--border);
+  color:var(--text);padding:10px 18px;border-radius:24px;
+  font-size:13px;font-weight:500;z-index:300;
+  opacity:0;transition:all 0.22s ease;pointer-events:none;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
+  max-width:calc(100vw - 32px);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.offline{border-color:rgba(239,68,68,0.3);color:#fca5a5;}
+
+/* Greeting popup */
+.greeting-popup{
+  position:fixed;top:calc(var(--header-h) + 10px);left:50%;
+  transform:translateX(-50%) translateY(-12px);
+  background:var(--bg2);border:1px solid var(--border-accent);
+  color:var(--text);padding:11px 18px;border-radius:16px;
+  font-size:14px;font-weight:500;z-index:290;
+  opacity:0;transition:all 0.24s ease;pointer-events:none;
+  display:flex;align-items:center;gap:8px;
+  max-width:calc(100vw - 32px);box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+.greeting-popup.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.greeting-emoji{font-size:18px;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header class="app-header">
+    <div class="app-logo">
+      <div class="logo-mark">P</div>
+      <div class="header-logo-group">
+        <span>Private Lobby</span>
+        <span class="header-sub">ND 2 Statistics · First Semester</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="sidebarToggle" title="Browse Courses">☰</button>
+  </header>
+
+  <div class="main-scroll" id="mainScroll">
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+
+      <!-- PWA Install Banner -->
+      <div class="install-banner" id="installBanner">
+        <span class="install-text"><strong>Install App</strong> — use offline, access faster</span>
+        <button class="install-btn" id="installBtn" onclick="triggerInstall()">Install</button>
+        <button class="install-dismiss" onclick="dismissInstall()" aria-label="dismiss">✕</button>
+      </div>
+
+      <div class="home-hero">
+        <div class="home-hero-top"></div>
+        <div class="hero-label">📚 ND 2 — Statistics</div>
+        <h1 class="hero-title">First Semester Prospectus</h1>
+        <p class="hero-sub">Notes, formulas & revision — all 8 courses in one place.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="statCourses">8</div>
+          <div class="stat-label">Courses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statTopics">0</div>
+          <div class="stat-label">Topics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statFormulas">0</div>
+          <div class="stat-label">Formulas</div>
+        </div>
+      </div>
+
+      <div class="section-row">
+        <span class="section-title">Continue Reading</span>
+        <span class="section-action" onclick="clearRecents()">Clear</span>
+      </div>
+      <div id="recentsContainer"></div>
+
+      <div class="section-row" style="margin-top:4px">
+        <span class="section-title">All Courses</span>
+      </div>
+      <div class="course-list" id="courseList"></div>
+    </div>
+
+    <!-- COURSE TOPICS -->
+    <div class="page" id="page-course">
+      <button class="back-btn" id="backFromCourse">← Back</button>
+      <div id="courseHeaderCard"></div>
+      <div style="font-family:var(--font-head);font-size:15px;font-weight:700;margin-bottom:var(--space-sm);color:var(--text)">Topics</div>
+      <div class="topics-grid" id="topicsList"></div>
+    </div>
+
+    <!-- TOPIC DETAIL -->
+    <div class="page" id="page-topic">
+      <div class="breadcrumb" id="topicBreadcrumb"></div>
+      <div id="topicContent"></div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="page" id="page-search">
+      <div class="search-wrap">
+        <span class="search-icon-prefix">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search courses, topics, formulas…" autocomplete="off">
+      </div>
+      <div id="searchResults" class="search-results">
+        <div class="search-empty">
+          <div class="search-empty-icon">🔎</div>
+          <div>Type to search across all content</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKMARKS -->
+    <div class="page" id="page-bookmarks">
+      <div style="font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:var(--space-md);color:var(--text)">⭐ Bookmarks</div>
+      <div id="bookmarksList"></div>
+    </div>
+
+    <!-- FORMULA HUB -->
+    <div class="page" id="page-formulas">
+      <div style="font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:var(--space-sm);color:var(--text)">📐 Formula Hub</div>
+      <div class="search-wrap">
+        <span class="search-icon-prefix">🔍</span>
+        <input type="text" class="search-input" id="formulaSearch" placeholder="Search formulas…" autocomplete="off">
+      </div>
+      <div id="formulasList"></div>
+    </div>
+
+    <!-- FORMULA COURSE DETAIL (sub-page inside formulas tab) -->
+    <div class="page" id="page-formula-course">
+      <button class="back-btn" id="backFromFormulaCourse">← Formula Hub</button>
+      <div id="formulaCourseHeader"></div>
+      <div id="formulaCourseContent"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div style="font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:var(--space-lg);color:var(--text)">⚙️ Settings</div>
+
+      <div class="settings-section">
+        <div class="settings-label">Appearance</div>
+        <div class="theme-toggle">
+          <button class="theme-btn active" data-mode="dark" onclick="setTheme('dark')">🌙 Dark</button>
+          <button class="theme-btn" data-mode="light" onclick="setTheme('light')">☀️ Light</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Accent Color</div>
+        <div class="color-grid">
+          <button class="color-btn active" data-color="cyan"    style="background:#06b6d4" onclick="setColor('cyan')"></button>
+          <button class="color-btn"         data-color="violet" style="background:#7c3aed" onclick="setColor('violet')"></button>
+          <button class="color-btn"         data-color="emerald"style="background:#059669" onclick="setColor('emerald')"></button>
+          <button class="color-btn"         data-color="rose"   style="background:#e11d48" onclick="setColor('rose')"></button>
+          <button class="color-btn"         data-color="amber"  style="background:#d97706" onclick="setColor('amber')"></button>
+          <button class="color-btn"         data-color="indigo" style="background:#4f46e5" onclick="setColor('indigo')"></button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Font</div>
+        <div class="font-grid">
+          <button class="font-btn active" data-font="inter" onclick="setFont('inter')">
+            <div class="font-btn-name" style="font-family:Inter,sans-serif">Inter</div>
+            <div class="font-btn-sample" style="font-family:Inter,sans-serif">Clean, modern, highly readable</div>
+          </button>
+          <button class="font-btn" data-font="poppins" onclick="setFont('poppins')">
+            <div class="font-btn-name" style="font-family:Poppins,sans-serif">Poppins</div>
+            <div class="font-btn-sample" style="font-family:Poppins,sans-serif">Geometric, rounded, friendly</div>
+          </button>
+          <button class="font-btn" data-font="roboto" onclick="setFont('roboto')">
+            <div class="font-btn-name" style="font-family:Roboto,sans-serif">Roboto</div>
+            <div class="font-btn-sample" style="font-family:Roboto,sans-serif">Natural, comfortable reading</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-label">Reset</div>
+        <button class="reset-btn" onclick="resetSettings()">↺ Restore Default Settings</button>
+      </div>
+
+      <!-- iOS install hint -->
+      <div id="iosInstallHint" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-md);">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">📲 Install on iPhone/iPad</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Tap the <strong style="color:var(--accent)">Share</strong> button in Safari, then tap <strong style="color:var(--accent)">"Add to Home Screen"</strong>.</div>
+      </div>
+
+      <div style="text-align:center;padding:20px 0;color:var(--text3);font-size:12px;line-height:1.8">
+        Private Lobby v3.0 — ND 2 Statistics Prospectus<br>
+        <span style="color:var(--accent);font-weight:700">◆</span> Study Smart
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home"      onclick="navTo('home')"><div class="nav-icon">🏠</div><span class="nav-label">Home</span></button>
+    <button class="nav-item" data-page="search"    onclick="navTo('search')"><div class="nav-icon">🔍</div><span class="nav-label">Search</span></button>
+    <button class="nav-item" data-page="bookmarks" onclick="navTo('bookmarks')"><div class="nav-icon">⭐</div><span class="nav-label">Bookmarks</span></button>
+    <button class="nav-item" data-page="formulas"  onclick="navTo('formulas')"><div class="nav-icon">📐</div><span class="nav-label">Formulas</span></button>
+    <button class="nav-item" data-page="settings"  onclick="navTo('settings')"><div class="nav-icon">⚙️</div><span class="nav-label">Settings</span></button>
+  </nav>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">Courses</span>
+    <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+  </div>
+  <div id="sidebarCourseList"></div>
+</div>
+
+<div class="toast offline" id="offlineToast">📡 You're offline</div>
+<div class="toast" id="copyToast">✓ Copied!</div>
+<div class="greeting-popup" id="greetingPopup"><span class="greeting-emoji" id="greetingEmoji">👋</span><span id="greetingText">Welcome back!</span></div>
+
+<script>
+const COURSES = [
+{
+  id:'sta211', code:'STA 211', name:'Statistical Theory II',
+  duration:'45 Hours', unit:'3.0', icon:'📊',
+  goal:'Enable the student to acquire a better understanding of theories of statistics.',
+  topics:[
+    {
+      id:'sta211-1', num:'1.0', name:'Continuous Random Variables',
+      notes:`<p>A <strong>Continuous Random Variable (CRV)</strong> is one that can take any value within a given range or interval — rather than specific countable values. Examples include height, weight, time, and temperature.</p>
+<p><strong>Key distinction from Discrete Random Variables:</strong></p>
+<ul>
+<li><strong>Discrete:</strong> Takes countable, specific values (e.g. number of students, dice outcome). P(X = x) > 0.</li>
+<li><strong>Continuous:</strong> Takes infinitely many values in an interval. The probability at any exact point is zero: P(X = c) = 0. Probabilities are only meaningful over intervals.</li>
+</ul>
+<p><strong>Why P(X = c) = 0?</strong> Because there are infinitely many possible values; the probability is spread infinitely thin at any single point. We must always specify an interval: P(a ≤ X ≤ b).</p>
+<p><strong>Examples:</strong> Time waiting for a bus, voltage in a circuit, temperature in a room, height of a randomly selected person, lifetime of a machine component.</p>`,
+      formulas:[
+        {name:'Probability over interval', f:'P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx'},
+        {name:'Point probability is zero', f:'P(X = c) = 0  for any constant c'},
+        {name:'Equivalence of inequality forms', f:'P(a ≤ X ≤ b) = P(a < X < b) = P(a ≤ X < b)'}
+      ],
+      example:`<strong>Example:</strong> Let X be the height (cm) of a randomly chosen adult. X is continuous — it could be 170.0, 170.01, 170.001 cm etc.<br><br>We can meaningfully ask: P(165 ≤ X ≤ 175) — the probability height falls between 165 and 175 cm.<br>But P(X = 170.00000) = 0 (exact value has zero probability).`,
+      youtube:'https://www.youtube.com/results?search_query=continuous+random+variables+statistics+explained'
+    },
+    {
+      id:'sta211-2', num:'2.0', name:'Continuous Probability Distributions',
+      notes:`<p>A <strong>Probability Density Function (pdf)</strong> f(x) describes how probability is distributed over the range of a continuous random variable. It is NOT a probability itself — it is a density.</p>
+<p><strong>Properties of a valid pdf:</strong></p>
+<ul>
+<li>f(x) ≥ 0 for all x (non-negative)</li>
+<li>∫₋∞^∞ f(x) dx = 1 (total area = 1)</li>
+<li>P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx (probability = area under curve)</li>
+</ul>
+<p><strong>Cumulative Distribution Function (CDF) F(x):</strong> Gives P(X ≤ x) — the probability that X takes a value up to x.</p>
+<p><strong>Properties of CDF:</strong></p>
+<ul>
+<li>0 ≤ F(x) ≤ 1</li>
+<li>F(-∞) = 0 and F(+∞) = 1</li>
+<li>F is non-decreasing</li>
+<li>f(x) = d/dx F(x) (pdf is the derivative of CDF)</li>
+<li>P(a ≤ X ≤ b) = F(b) - F(a)</li>
+</ul>
+<p><strong>Uniform Distribution X ~ U(a, b):</strong> Constant density across [a, b]; models situations where all outcomes in a range are equally likely (e.g. random arrival time).</p>
+<p><strong>Exponential Distribution X ~ Exp(λ):</strong> Models time between random events in a Poisson process (e.g. time between customer arrivals). Parameter λ = rate.</p>
+<p><strong>Properties of Exponential:</strong> It is memoryless — P(X > s+t | X > s) = P(X > t). Mean = 1/λ, Variance = 1/λ².</p>`,
+      formulas:[
+        {name:'PDF property (total area)', f:'∫₋∞^∞ f(x) dx = 1'},
+        {name:'Probability from PDF', f:'P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx'},
+        {name:'CDF definition', f:'F(x) = P(X ≤ x) = ∫₋∞ˣ f(t) dt'},
+        {name:'PDF from CDF', f:'f(x) = F\'(x) = d/dx F(x)'},
+        {name:'Probability using CDF', f:'P(a ≤ X ≤ b) = F(b) − F(a)'},
+        {name:'Uniform PDF', f:'f(x) = 1/(b−a),   a ≤ x ≤ b;  else 0'},
+        {name:'Uniform CDF', f:'F(x) = (x−a)/(b−a),   a ≤ x ≤ b'},
+        {name:'Uniform Mean & Variance', f:'E(X) = (a+b)/2,   Var(X) = (b−a)²/12'},
+        {name:'Exponential PDF', f:'f(x) = λe^(−λx),   x ≥ 0,  λ > 0'},
+        {name:'Exponential CDF', f:'F(x) = 1 − e^(−λx),   x ≥ 0'},
+        {name:'Exponential Mean & Variance', f:'E(X) = 1/λ,   Var(X) = 1/λ²'},
+        {name:'Exponential Memoryless property', f:'P(X > s+t | X > s) = P(X > t)'}
+      ],
+      example:`<strong>Example — Uniform:</strong> X ~ U(2, 6). Find P(3 ≤ X ≤ 5).<br>f(x) = 1/(6−2) = 0.25<br>P(3 ≤ X ≤ 5) = (5−3) × 0.25 = 0.5<br><br><strong>Example — Exponential:</strong> Customers arrive at rate λ = 2/min. Find P(wait > 1 min).<br>P(X > 1) = 1 − F(1) = e^(−2×1) = e^(−2) ≈ 0.135`,
+      youtube:'https://www.youtube.com/results?search_query=probability+density+function+CDF+uniform+exponential+distribution'
+    },
+    {
+      id:'sta211-3', num:'3.0', name:'Normal Distribution',
+      notes:`<p>The <strong>Normal Distribution N(μ, σ²)</strong> is the most important distribution in statistics. It produces a symmetric, bell-shaped curve and arises naturally from many real phenomena (central limit theorem).</p>
+<p><strong>Properties of Normal Distribution:</strong></p>
+<ul>
+<li>Symmetric about the mean μ</li>
+<li>Mean = Median = Mode = μ</li>
+<li>Total area under curve = 1</li>
+<li>Completely described by two parameters: μ (mean) and σ² (variance)</li>
+<li>68-95-99.7 Rule: 68% within ±1σ, 95% within ±2σ, 99.7% within ±3σ</li>
+<li>Curve extends infinitely in both directions (asymptotic)</li>
+<li>Inflection points at μ ± σ</li>
+</ul>
+<p><strong>Standard Normal Distribution Z ~ N(0, 1):</strong> Special case with mean=0, variance=1. Z-scores measure how many standard deviations a value is from the mean. We use Z-tables to find probabilities.</p>
+<p><strong>Standardization:</strong> Any normal variable X can be converted to Z using Z = (X − μ)/σ. This allows use of standard Z-tables.</p>
+<p><strong>Normal Approximation to Binomial:</strong> When n is large (np > 5 and nq > 5), B(n,p) ≈ N(np, npq). Apply continuity correction: P(X ≤ k) ≈ P(Z ≤ (k+0.5−np)/√(npq)).</p>
+<p><strong>Normal Approximation to Poisson:</strong> When λ is large (λ > 20), Poisson(λ) ≈ N(λ, λ).</p>`,
+      formulas:[
+        {name:'Normal PDF', f:'f(x) = (1/σ√(2π)) × exp(−(x−μ)²/2σ²)'},
+        {name:'Standard Normal PDF', f:'φ(z) = (1/√(2π)) × e^(−z²/2)'},
+        {name:'Z-score (standardization)', f:'Z = (X − μ) / σ'},
+        {name:'Back-transform', f:'X = μ + Zσ'},
+        {name:'68-95-99.7 Rule', f:'P(μ−σ < X < μ+σ) = 0.6827\nP(μ−2σ < X < μ+2σ) = 0.9545\nP(μ−3σ < X < μ+3σ) = 0.9973'},
+        {name:'Normal approx to Binomial — mean/SD', f:'μ = np,   σ = √(npq),   q = 1−p'},
+        {name:'Normal approx to Poisson — mean/SD', f:'μ = λ,   σ = √λ'},
+        {name:'Continuity correction (approx)', f:'P(X ≤ k) → P(X ≤ k + 0.5)  in normal'}
+      ],
+      example:`<strong>Example:</strong> X ~ N(50, 16). Find P(46 < X < 58).<br>Z₁ = (46−50)/4 = −1,   Z₂ = (58−50)/4 = 2<br>P(−1 < Z < 2) = Φ(2) − Φ(−1) = 0.9772 − 0.1587 = 0.8185`,
+      youtube:'https://www.youtube.com/results?search_query=normal+distribution+Z+score+standard+normal+statistics'
+    },
+    {
+      id:'sta211-4', num:'4.0', name:'Expectation of Continuous Random Variables',
+      notes:`<p>The <strong>Expected Value E(X)</strong> (or mean) of a CRV is the weighted average of all possible values, weighted by the probability density function. It represents the "centre of gravity" of the distribution.</p>
+<p><strong>Rules of Expectation:</strong></p>
+<ul>
+<li>E(c) = c for any constant c</li>
+<li>E(aX + b) = aE(X) + b</li>
+<li>E(X + Y) = E(X) + E(Y) (always)</li>
+<li>E(XY) = E(X)E(Y) only if X, Y are independent</li>
+</ul>
+<p><strong>Rules of Variance:</strong></p>
+<ul>
+<li>Var(X) = E(X²) − [E(X)]² (computational formula)</li>
+<li>Var(c) = 0 for any constant c</li>
+<li>Var(aX + b) = a²Var(X)</li>
+<li>Var(X + Y) = Var(X) + Var(Y) only if X, Y are independent</li>
+</ul>
+<p><strong>Standard Deviation:</strong> σ = √Var(X) — same units as X.</p>`,
+      formulas:[
+        {name:'Expected value (mean)', f:'E(X) = μ = ∫₋∞^∞ x · f(x) dx'},
+        {name:'E(g(X))', f:'E[g(X)] = ∫₋∞^∞ g(x) · f(x) dx'},
+        {name:'E(X²)', f:'E(X²) = ∫₋∞^∞ x² · f(x) dx'},
+        {name:'Variance — definition', f:'Var(X) = E[(X−μ)²] = ∫(x−μ)² f(x) dx'},
+        {name:'Variance — computational formula', f:'Var(X) = E(X²) − [E(X)]²'},
+        {name:'Standard deviation', f:'σ = √Var(X)'},
+        {name:'Linear transform of E', f:'E(aX + b) = aE(X) + b'},
+        {name:'Linear transform of Var', f:'Var(aX + b) = a²Var(X)'}
+      ],
+      example:`<strong>Example:</strong> f(x) = 3x² for 0 ≤ x ≤ 1.<br>E(X) = ∫₀¹ x·3x² dx = ∫₀¹ 3x³ dx = [3x⁴/4]₀¹ = 3/4<br>E(X²) = ∫₀¹ x²·3x² dx = ∫₀¹ 3x⁴ dx = [3x⁵/5]₀¹ = 3/5<br>Var(X) = 3/5 − (3/4)² = 3/5 − 9/16 = 48/80 − 45/80 = 3/80`,
+      youtube:'https://www.youtube.com/results?search_query=expected+value+variance+continuous+random+variable+integral'
+    },
+    {
+      id:'sta211-5', num:'5.0', name:'Moments and Moment Generating Functions',
+      notes:`<p><strong>Moments</strong> are summary measures that describe the shape of a probability distribution. They are computed as expected values of powers of X or (X−μ).</p>
+<p><strong>Types of Moments:</strong></p>
+<ul>
+<li><strong>Moments about the origin (raw moments):</strong> μ'ᵣ = E(Xʳ). So μ'₁ = E(X) = mean.</li>
+<li><strong>Central moments:</strong> μᵣ = E[(X−μ)ʳ]. So μ₂ = Var(X), μ₃ relates to skewness, μ₄ to kurtosis.</li>
+</ul>
+<p><strong>Skewness:</strong> Measures asymmetry. Positive skew = tail to the right. Negative skew = tail to left.</p>
+<p><strong>Kurtosis:</strong> Measures peakedness relative to normal. β₂ = 3 for normal; >3 is leptokurtic (sharp peak); <3 is platykurtic (flat peak).</p>
+<p><strong>Moment Generating Function (MGF) M_X(t):</strong> A function of t that, when differentiated r times and evaluated at t = 0, gives the r-th moment. It uniquely identifies a distribution and is very powerful in probability theory.</p>
+<p><strong>Relationship between expectation and moments:</strong> μ = μ'₁ (first raw moment = mean). σ² = μ₂ = μ'₂ − (μ'₁)² (second central moment = variance).</p>`,
+      formulas:[
+        {name:'r-th raw moment', f:"μ'ᵣ = E(Xʳ) = ∫₋∞^∞ xʳ f(x) dx"},
+        {name:'r-th central moment', f:'μᵣ = E[(X−μ)ʳ] = ∫₋∞^∞ (x−μ)ʳ f(x) dx'},
+        {name:'Mean (1st raw moment)', f:"μ = μ'₁ = E(X)"},
+        {name:'Variance (2nd central moment)', f:"σ² = μ₂ = μ'₂ − (μ'₁)²"},
+        {name:'Skewness coefficient', f:'β₁ = μ₃ / σ³   (or γ₁ = μ₃/σ³)'},
+        {name:'Kurtosis coefficient', f:'β₂ = μ₄ / σ⁴   (β₂ = 3 for normal)'},
+        {name:'MGF definition', f:'M_X(t) = E(e^(tX)) = ∫₋∞^∞ e^(tx) f(x) dx'},
+        {name:'r-th moment from MGF', f:"μ'ᵣ = M_X^(r)(0)  [r-th derivative at t=0]"},
+        {name:'Mean from MGF', f:"E(X) = M_X'(0)"},
+        {name:'Variance from MGF', f:"Var(X) = M_X''(0) − [M_X'(0)]²"},
+        {name:'MGF of Normal N(μ,σ²)', f:'M_X(t) = exp(μt + σ²t²/2)'},
+        {name:'MGF of Exponential Exp(λ)', f:'M_X(t) = λ/(λ−t),  t < λ'}
+      ],
+      example:`<strong>Example (MGF of Exponential):</strong> X ~ Exp(λ).<br>M(t) = λ/(λ−t)<br>M'(t) = λ/(λ−t)²  →  E(X) = M'(0) = 1/λ<br>M''(t) = 2λ/(λ−t)³  →  E(X²) = M''(0) = 2/λ²<br>Var(X) = 2/λ² − (1/λ)² = 2/λ² − 1/λ² = 1/λ²`,
+      youtube:'https://www.youtube.com/results?search_query=moment+generating+function+moments+statistics+tutorial'
+    }
+  ]
+},
+{
+  id:'sta212', code:'STA 212', name:'Elements of Sampling Theory',
+  duration:'30 Hours', unit:'3.0', icon:'🎯',
+  goal:'Introduce the student to sampling theory distribution and develop ability to apply these in simple estimation problems.',
+  topics:[
+    {
+      id:'sta212-1', num:'1.0', name:'Concept of Sampling',
+      notes:`<p>A <strong>Population (Universe)</strong> is the complete collection of all items, individuals, or measurements being studied. Populations can be:</p>
+<ul>
+<li><strong>Finite:</strong> Countable (e.g. all students in a school, all cars in a city)</li>
+<li><strong>Infinite:</strong> Cannot be fully counted (e.g. all possible measurements, all grains of sand on a beach)</li>
+</ul>
+<p>A <strong>Sample</strong> is a subset of the population selected for study. We study samples because examining an entire population is often impractical, too costly, or destructive (e.g. crash-testing every car).</p>
+<p><strong>Sampling with Replacement (WR):</strong> Each selected unit is returned to the population before the next draw. The same unit can be selected more than once. Population size stays constant.</p>
+<p><strong>Sampling without Replacement (WOR):</strong> Selected units are NOT returned. Population decreases with each draw. More common in practice.</p>
+<p><strong>Advantages of sampling:</strong> Less time, lower cost, feasible when testing destroys items, allows more detailed study of a smaller group.</p>
+<p><strong>Disadvantages of sampling:</strong> Results contain sampling error (difference between sample and true population value). Results may be misleading if sample is biased.</p>
+<p><strong>Parameter:</strong> A numerical characteristic of the population. Fixed but usually unknown. Denoted by Greek letters: μ (mean), σ (SD), p (proportion), N (size).</p>
+<p><strong>Statistic:</strong> A numerical characteristic computed from a sample. Variable — changes from sample to sample. Denoted: x̄ (mean), s (SD), p̂ (proportion), n (size).</p>`,
+      formulas:[
+        {name:'Population mean (parameter)', f:'μ = (ΣX) / N'},
+        {name:'Sample mean (statistic)', f:'x̄ = (Σx) / n'},
+        {name:'Population variance', f:'σ² = Σ(X−μ)² / N'},
+        {name:'Sample variance', f:'s² = Σ(x−x̄)² / (n−1)   [unbiased]'}
+      ],
+      example:`<strong>Example:</strong> A factory makes 50,000 light bulbs (N=50,000). To estimate average lifetime, we test 200 bulbs (n=200). The true average lifetime of all 50,000 bulbs is the parameter μ. The average lifetime of our 200 tested bulbs is the statistic x̄.`,
+      youtube:'https://www.youtube.com/results?search_query=sampling+theory+population+sample+parameter+statistic+statistics'
+    },
+    {
+      id:'sta212-2', num:'2.0', name:'Continuous Distributions in Sampling (t, χ², F)',
+      notes:`<p><strong>t-Distribution (Student's t):</strong> Used when σ is unknown and we use s (sample SD) instead. Bell-shaped, symmetric, heavier tails than normal. As n → ∞, t → Z (normal). Critical for small samples (n < 30).</p>
+<p><strong>Degrees of Freedom (df):</strong> Number of values free to vary after calculating a statistic. For a single sample: df = n − 1. For two samples: df = n₁ + n₂ − 2.</p>
+<p><strong>Chi-Square Distribution (χ²):</strong> Always positive (right-skewed). Shape depends on df. Used for:<br>— Testing variance: χ² = (n−1)s²/σ²<br>— Goodness-of-fit tests<br>— Tests of independence in contingency tables</p>
+<p><strong>F-Distribution:</strong> Ratio of two independent chi-square distributions divided by their df. Always positive. Used for:<br>— Comparing two population variances<br>— ANOVA (Analysis of Variance)<br>— Regression significance tests</p>
+<p><strong>Key relationships:</strong></p>
+<ul>
+<li>If Z ~ N(0,1) and V ~ χ²(ν), independent → T = Z/√(V/ν) ~ t(ν)</li>
+<li>If U ~ χ²(m) and V ~ χ²(n), independent → F = (U/m)/(V/n) ~ F(m,n)</li>
+<li>t²(ν) = F(1,ν) — t² equals an F with df₁=1</li>
+</ul>`,
+      formulas:[
+        {name:'t-statistic (1 sample, σ unknown)', f:'t = (x̄ − μ₀) / (s/√n),   df = n−1'},
+        {name:'t-statistic (2 samples, equal variance)', f:'t = (x̄₁−x̄₂) / [sp√(1/n₁+1/n₂)],   df = n₁+n₂−2'},
+        {name:'Pooled standard deviation', f:'sp² = [(n₁−1)s₁² + (n₂−1)s₂²] / (n₁+n₂−2)'},
+        {name:'Chi-square for variance test', f:'χ² = (n−1)s² / σ₀²,   df = n−1'},
+        {name:'F-statistic for variance comparison', f:'F = s₁² / s₂²   (larger variance in numerator)'},
+        {name:'Relationship: t and F', f:'t²(ν) = F(1, ν)'},
+        {name:'Chi-square from normal', f:'If Z ~ N(0,1), then Z² ~ χ²(1)'},
+        {name:'Sum of chi-squares', f:'If U~χ²(m), V~χ²(n) independent → U+V ~ χ²(m+n)'}
+      ],
+      example:`<strong>Example (t-test):</strong> n=16, x̄=52, s=8, test H₀: μ=50.<br>t = (52−50)/(8/√16) = 2/2 = 1.0,   df = 15<br>Compare with t-table: t₀.₀₅,₁₅ = 1.753. Since 1.0 < 1.753, fail to reject H₀.`,
+      youtube:'https://www.youtube.com/results?search_query=t+distribution+chi+square+F+distribution+sampling+theory'
+    },
+    {
+      id:'sta212-3', num:'3.0', name:'Sampling Distributions',
+      notes:`<p>A <strong>Sampling Distribution</strong> is the probability distribution of a sample statistic (e.g. x̄) computed from all possible samples of size n from a population. It is a theoretical distribution — not just one sample.</p>
+<p><strong>Standard Error (SE):</strong> The standard deviation of the sampling distribution of a statistic. It measures how much the statistic varies from sample to sample. Smaller SE = more reliable estimate.</p>
+<p><strong>Sampling Distribution of the Mean:</strong></p>
+<ul>
+<li>Mean of sampling distribution: E(x̄) = μ (unbiased)</li>
+<li>Variance of sampling distribution: Var(x̄) = σ²/n (finite population: multiply by finite population correction factor)</li>
+</ul>
+<p><strong>Finite Population Correction (FPC):</strong> Applied when sample is a significant fraction of the population (n/N > 0.05). It reduces the SE to account for less variability.</p>
+<p><strong>Sampling Distribution of the Difference of Two Means:</strong> Used to compare two populations. Mean = μ₁ − μ₂; Variance = σ₁²/n₁ + σ₂²/n₂.</p>
+<p><strong>Pooled Variance:</strong> Used when σ₁² = σ₂² (equal but unknown). Combines both sample variances into one estimate.</p>
+<p><strong>Sampling Distribution of Variance:</strong> (n−1)s²/σ² follows a chi-square distribution with n−1 degrees of freedom.</p>`,
+      formulas:[
+        {name:'Mean of x̄ distribution', f:'E(x̄) = μ'},
+        {name:'Variance of x̄ (infinite pop)', f:'Var(x̄) = σ²/n'},
+        {name:'Standard error of mean', f:'SE(x̄) = σ/√n   (or s/√n if σ unknown)'},
+        {name:'Finite population correction', f:'SE(x̄) = (σ/√n) × √((N−n)/(N−1))'},
+        {name:'Sampling dist. of difference of means', f:'E(x̄₁−x̄₂) = μ₁−μ₂\nVar(x̄₁−x̄₂) = σ₁²/n₁ + σ₂²/n₂'},
+        {name:'Pooled variance estimate', f:'sp² = [(n₁−1)s₁² + (n₂−1)s₂²] / (n₁+n₂−2)'},
+        {name:'SE of difference (equal variance)', f:'SE(x̄₁−x̄₂) = sp × √(1/n₁ + 1/n₂)'},
+        {name:'Sampling dist. of variance', f:'(n−1)s²/σ² ~ χ²(n−1)'},
+        {name:'Standard error of proportion', f:'SE(p̂) = √(pq/n),   q = 1−p'}
+      ],
+      example:`<strong>Example:</strong> Population: μ=100, σ=20, n=25.<br>SE(x̄) = 20/√25 = 20/5 = 4<br>The sampling distribution of x̄ is approximately N(100, 4²).<br>P(x̄ > 106) = P(Z > (106−100)/4) = P(Z > 1.5) = 1 − 0.9332 = 0.0668`,
+      youtube:'https://www.youtube.com/results?search_query=sampling+distribution+mean+standard+error+statistics'
+    },
+    {
+      id:'sta212-4', num:'4.0', name:'Central Limit Theorem',
+      notes:`<p>The <strong>Central Limit Theorem (CLT)</strong> is one of the most important theorems in statistics. It states:</p>
+<p style="background:var(--bg3);padding:10px;border-radius:8px;border-left:3px solid var(--accent)"><strong>If X₁, X₂, …, Xₙ are independent and identically distributed (i.i.d.) random variables from ANY distribution with finite mean μ and variance σ², then as n → ∞, the sample mean x̄ is approximately normally distributed.</strong></p>
+<p><strong>Key implications:</strong></p>
+<ul>
+<li>The distribution of x̄ is approximately N(μ, σ²/n) for large n</li>
+<li>Works for ANY original distribution (normal, exponential, uniform, etc.)</li>
+<li>Rule of thumb: n ≥ 30 is usually sufficient; n ≥ 15 for near-normal populations</li>
+<li>Foundation for confidence intervals and most hypothesis tests</li>
+</ul>
+<p><strong>Uses of CLT:</strong></p>
+<ul>
+<li>Allows use of Z-test for large samples regardless of population shape</li>
+<li>Explains why normal distribution appears so commonly in practice</li>
+<li>Applies to sums as well as means: ΣXᵢ is approximately normal</li>
+</ul>
+<p><strong>CLT for Proportions:</strong> When np > 5 and nq > 5, p̂ ~ N(p, pq/n) approximately.</p>`,
+      formulas:[
+        {name:'CLT — distribution of sample mean', f:'x̄ ~ N(μ, σ²/n)  as n → ∞'},
+        {name:'Z-score for sample mean', f:'Z = (x̄ − μ) / (σ/√n)'},
+        {name:'CLT — distribution of sample sum', f:'ΣXᵢ ~ N(nμ, nσ²)  as n → ∞'},
+        {name:'CLT for proportions', f:'p̂ ~ N(p, pq/n)  when np>5, nq>5'},
+        {name:'Z for proportion', f:'Z = (p̂ − p) / √(pq/n)'},
+        {name:'Sampling dist. of difference of proportions', f:'p̂₁−p̂₂ ~ N(p₁−p₂,  p₁q₁/n₁+p₂q₂/n₂)'},
+        {name:'Z for difference of proportions', f:'Z = (p̂₁−p̂₂) / √(p₁q₁/n₁+p₂q₂/n₂)'}
+      ],
+      example:`<strong>Example:</strong> Population: μ=100, σ=15, n=36.<br>By CLT: x̄ ~ N(100, 225/36) = N(100, 6.25)<br>P(x̄ > 105) = P(Z > (105−100)/2.5) = P(Z > 2) = 0.0228<br><br><strong>Proportion example:</strong> p=0.3, n=100. P(p̂ > 0.35)?<br>SE = √(0.3×0.7/100) = √0.0021 = 0.0458<br>Z = (0.35−0.3)/0.0458 = 1.09 → P = 0.138`,
+      youtube:'https://www.youtube.com/results?search_query=central+limit+theorem+CLT+explained+statistics'
+    },
+    {
+      id:'sta212-5', num:'5.0–6.0', name:'Estimation Theory & Point Estimation',
+      notes:`<p><strong>Statistical Estimation</strong> is the process of using sample data to infer unknown population parameters. It is divided into point estimation and interval estimation.</p>
+<p><strong>Point Estimate:</strong> A single number used to estimate a parameter. E.g. x̄ = 52.4 estimates μ. Simple but gives no information about precision.</p>
+<p><strong>Interval Estimate (Confidence Interval):</strong> A range (lower, upper) that captures the true parameter with a stated probability (confidence level). More informative than a point estimate.</p>
+<p><strong>Estimator:</strong> The rule/formula used to calculate an estimate. x̄ is an estimator of μ.</p>
+<p><strong>Properties of Good Estimators:</strong></p>
+<ul>
+<li><strong>Unbiasedness:</strong> E(θ̂) = θ — on average, the estimator hits the true value. Bias = E(θ̂) − θ = 0.</li>
+<li><strong>Consistency:</strong> As n → ∞, θ̂ converges to θ in probability.</li>
+<li><strong>Efficiency:</strong> Among all unbiased estimators, it has minimum variance (MVUE — Minimum Variance Unbiased Estimator).</li>
+<li><strong>Sufficiency:</strong> The estimator uses all information in the sample relevant to the parameter.</li>
+</ul>
+<p><strong>Methods of Point Estimation:</strong></p>
+<ul>
+<li><strong>Maximum Likelihood Estimation (MLE):</strong> Find the parameter value that makes the observed data most probable. Maximise L(θ) = ∏ f(xᵢ; θ). Usually work with log-likelihood ℓ(θ) = ln L(θ) for ease of differentiation.</li>
+<li><strong>Least Squares Method (LSE):</strong> Minimise sum of squared differences between observed and predicted values. Used extensively in regression.</li>
+<li><strong>Method of Moments:</strong> Set sample moments equal to population moments and solve for parameters. Simple but less efficient than MLE.</li>
+</ul>`,
+      formulas:[
+        {name:'Unbiasedness condition', f:'E(θ̂) = θ   (Bias = E(θ̂) − θ = 0)'},
+        {name:'Mean Squared Error (MSE)', f:'MSE(θ̂) = Var(θ̂) + [Bias(θ̂)]²'},
+        {name:'Likelihood function', f:'L(θ) = ∏ᵢ f(xᵢ; θ)  [product over all obs]'},
+        {name:'Log-likelihood', f:'ℓ(θ) = ln L(θ) = Σᵢ ln f(xᵢ; θ)'},
+        {name:'MLE — solving condition', f:"dℓ/dθ = 0  and  d²ℓ/dθ² < 0  (maximum)"},
+        {name:'LSE objective', f:'Minimize: S = Σᵢ (yᵢ − ŷᵢ)²'},
+        {name:'Method of Moments (1st moment)', f:"μ'₁ = x̄  →  Solve for parameter(s)"},
+        {name:'MLE for Normal — mean', f:'μ̂ = x̄ = (1/n)Σxᵢ'},
+        {name:'MLE for Normal — variance', f:'σ̂² = (1/n)Σ(xᵢ − x̄)²  [biased]'},
+        {name:'MLE for Poisson — λ', f:'λ̂ = x̄'}
+      ],
+      example:`<strong>MLE for Exponential(λ):</strong> Given x₁, …, xₙ ~ Exp(λ):<br>L(λ) = ∏ λe^(−λxᵢ) = λⁿ exp(−λΣxᵢ)<br>ℓ(λ) = n ln λ − λΣxᵢ<br>dℓ/dλ = n/λ − Σxᵢ = 0  →  λ̂ = n/Σxᵢ = 1/x̄`,
+      youtube:'https://www.youtube.com/results?search_query=point+estimation+MLE+method+of+moments+statistics'
+    },
+    {
+      id:'sta212-6', num:'7.0', name:'Confidence Intervals',
+      notes:`<p>A <strong>Confidence Interval (CI)</strong> is an interval estimate [L, U] constructed from sample data such that the true parameter θ lies within [L, U] with a stated probability (1−α).</p>
+<p><strong>Important interpretation:</strong> "95% CI" means that if we repeated the sampling many times and computed a CI each time, 95% of those intervals would contain the true parameter. It does NOT mean the parameter has 95% probability of being in this particular interval.</p>
+<p><strong>Components:</strong></p>
+<ul>
+<li><strong>Confidence level (1−α):</strong> Probability of interval capturing true value. Common: 90%, 95%, 99%.</li>
+<li><strong>Significance level α:</strong> Probability interval misses the true value. α = 1 − confidence level.</li>
+<li><strong>Margin of Error (E):</strong> Half-width of the CI = critical value × SE.</li>
+</ul>
+<p><strong>Width of CI depends on:</strong> Sample size n (larger n → narrower), confidence level (higher level → wider), variability σ (higher variability → wider).</p>`,
+      formulas:[
+        {name:'CI for mean (σ known, large n)', f:'x̄ ± Z_{α/2} × σ/√n'},
+        {name:'CI for mean (σ unknown, small n)', f:'x̄ ± t_{α/2, n−1} × s/√n'},
+        {name:'CI for proportion', f:'p̂ ± Z_{α/2} × √(p̂q̂/n)'},
+        {name:'CI for variance', f:'[(n−1)s²/χ²_{α/2},   (n−1)s²/χ²_{1−α/2}]'},
+        {name:'CI for difference of means (σs known)', f:'(x̄₁−x̄₂) ± Z_{α/2}√(σ₁²/n₁+σ₂²/n₂)'},
+        {name:'CI for diff. of means (σs unknown, equal)', f:'(x̄₁−x̄₂) ± t_{α/2, n₁+n₂−2} × sp√(1/n₁+1/n₂)'},
+        {name:'Critical Z values (common)', f:'90%: 1.645  |  95%: 1.960  |  99%: 2.576'},
+        {name:'Sample size for estimating mean', f:'n = (Z_{α/2} × σ / E)²'},
+        {name:'Sample size for proportion', f:'n = Z_{α/2}² × p(1−p) / E²'}
+      ],
+      example:`<strong>Example:</strong> n=36, x̄=85, s=12, 95% CI for μ.<br>Use Z=1.96 (large n): CI = 85 ± 1.96 × 12/√36 = 85 ± 1.96 × 2 = 85 ± 3.92<br>CI: (81.08, 88.92)<br><br><strong>Interpretation:</strong> We are 95% confident the true population mean lies between 81.08 and 88.92.`,
+      youtube:'https://www.youtube.com/results?search_query=confidence+interval+mean+proportion+statistics+tutorial'
+    },
+    {
+      id:'sta212-7', num:'8.0', name:'Test of Hypothesis',
+      notes:`<p><strong>Hypothesis Testing</strong> is a formal procedure for using sample evidence to decide whether to reject a claim (hypothesis) about a population parameter.</p>
+<p><strong>Steps in Hypothesis Testing:</strong></p>
+<ol style="padding-left:18px">
+<li>State H₀ and H₁</li>
+<li>Choose significance level α</li>
+<li>Select appropriate test statistic</li>
+<li>Determine critical region / p-value</li>
+<li>Calculate test statistic from data</li>
+<li>Make decision: Reject or Fail to Reject H₀</li>
+<li>State conclusion in context</li>
+</ol>
+<p><strong>Null Hypothesis H₀:</strong> The default assumption of "no effect" or "no difference." Always contains equality (=, ≤, ≥).</p>
+<p><strong>Alternative Hypothesis H₁:</strong> The researcher's claim. Can be one-tailed (< or >) or two-tailed (≠).</p>
+<p><strong>Type I Error (α):</strong> Rejecting H₀ when H₀ is TRUE. Called a "false positive." α = P(Type I Error) = significance level.</p>
+<p><strong>Type II Error (β):</strong> Failing to reject H₀ when H₀ is FALSE. Called a "false negative."</p>
+<p><strong>Power of a test = 1 − β:</strong> Probability of correctly rejecting a false H₀. Higher power = better test.</p>
+<p><strong>p-value:</strong> The probability of observing a test statistic as extreme as the computed value, assuming H₀ is true. Reject H₀ if p-value < α.</p>`,
+      formulas:[
+        {name:'Z-test (large n, σ known)', f:'Z = (x̄ − μ₀) / (σ/√n)'},
+        {name:'t-test (small n, σ unknown)', f:'t = (x̄ − μ₀) / (s/√n),   df = n−1'},
+        {name:'Z-test for proportion', f:'Z = (p̂ − p₀) / √(p₀q₀/n)'},
+        {name:'Two-sample Z-test for means', f:'Z = (x̄₁−x̄₂) / √(σ₁²/n₁+σ₂²/n₂)'},
+        {name:'Two-sample t-test (equal variance)', f:'t = (x̄₁−x̄₂) / [sp√(1/n₁+1/n₂)]'},
+        {name:'Chi-square goodness-of-fit', f:'χ² = Σ (O−E)² / E,   df = k−1'},
+        {name:'Chi-square test of independence', f:'χ² = Σ (O−E)² / E,   df = (r−1)(c−1)'},
+        {name:'F-test for equal variances', f:'F = s₁²/s₂²,   df₁=n₁−1, df₂=n₂−1'},
+        {name:'Error types summary', f:'P(Type I) = α  |  P(Type II) = β  |  Power = 1−β'},
+        {name:'Decision rule (two-tailed)', f:'Reject H₀ if |Z| > Z_{α/2}  (or |t| > t_{α/2})'}
+      ],
+      example:`<strong>Example:</strong> H₀: μ=100, H₁: μ≠100 (two-tailed), α=0.05.<br>n=36, x̄=106, σ=12.<br>Z = (106−100)/(12/√36) = 6/2 = 3.0<br>Critical value: Z₀.₀₂₅ = 1.96<br>|Z| = 3.0 > 1.96 → Reject H₀.<br>Conclusion: Significant evidence that μ ≠ 100.`,
+      youtube:'https://www.youtube.com/results?search_query=hypothesis+testing+null+alternative+type+1+2+error+statistics'
+    }
+  ]
+},
+{
+  id:'sta213', code:'STA 213', name:'Economic and Social Statistics I',
+  duration:'30 Hours', unit:'3.0', icon:'📈',
+  goal:'Introduce the student to the basic concept of economic and social statistics.',
+  topics:[
+    {
+      id:'sta213-1', num:'1.0', name:'Statistical System — Organisation in Nigeria',
+      notes:`<p>A <strong>Statistical System</strong> is an organized framework for collecting, processing, analysing, and disseminating data to support national planning, decision making, and policy formulation.</p>
+<p><strong>Types of Statistical Systems:</strong></p>
+<ul>
+<li><strong>Centralized System:</strong> A single national agency controls all statistical activities. Advantage: uniformity and coordination. Disadvantage: can be slow and bureaucratic.</li>
+<li><strong>Decentralized System:</strong> Multiple agencies collect statistics in their respective domains. Advantage: specialization. Disadvantage: risk of duplication or inconsistency.</li>
+</ul>
+<p><strong>Role of a Statistical System:</strong> Provide reliable data for: national planning, population census, economic measurement, policy evaluation, monitoring development goals.</p>
+<p><strong>Federal Statistical Bodies in Nigeria:</strong></p>
+<ul>
+<li><strong>NBS (National Bureau of Statistics):</strong> Formerly FOS. Nigeria's primary national statistics agency. Collects, analyses and publishes national statistical data.</li>
+<li><strong>NPC (National Population Commission):</strong> Responsible for census and population data.</li>
+</ul>
+<p><strong>Quasi-Governmental Agencies:</strong> NPA (Nigerian Ports Authority), NISSER, CBN (Central Bank of Nigeria), NRB (National Revenue Board), NNPC (Nigerian National Petroleum Corporation).</p>
+<p><strong>Statistical Coordinating Bodies:</strong></p>
+<ul>
+<li>National Council on Statistics</li>
+<li>National Advisory Committee on Statistics</li>
+<li>National Consultative Committee of Statistics</li>
+</ul>
+<p>Agencies can be classified as <strong>Producers</strong> (those that collect and compile statistics) or <strong>Users</strong> (those that consume statistics to guide decisions). Many agencies are both.</p>`,
+      formulas:[],
+      example:`<strong>Example:</strong> The CBN is both a Producer (produces financial and monetary statistics: inflation, money supply, interest rates) AND a User (uses economic statistics to formulate monetary policy). NPC is primarily a Producer (population data).`,
+      youtube:'https://www.youtube.com/results?search_query=National+Bureau+of+Statistics+Nigeria+NBS+statistical+system'
+    },
+    {
+      id:'sta213-2', num:'2.0', name:'Nature and Importance of Economic and Social Statistics',
+      notes:`<p><strong>Economic Statistics:</strong> Quantitative data about economic activities and conditions. Includes: GDP, GNP, inflation rates, unemployment, trade balances, price indices, income distribution, industrial production, government revenue and expenditure.</p>
+<p><strong>Social Statistics:</strong> Quantitative data about social conditions, human welfare, and social behaviour. Includes: population size and structure, birth/death rates, literacy rates, school enrolment, health indicators, crime rates, housing conditions.</p>
+<p><strong>Sources of Economic/Social Data:</strong></p>
+<ul>
+<li>Government surveys and censuses (population census, agricultural census)</li>
+<li>Administrative records (tax records, birth/death registers, school records)</li>
+<li>International organizations (World Bank, IMF, UNDP, WHO)</li>
+<li>Private sector reports, industry associations</li>
+<li>Academic research, household surveys</li>
+</ul>
+<p><strong>Uses of Economic and Social Statistics:</strong></p>
+<ul>
+<li>Policy formulation and government planning</li>
+<li>Resource allocation across sectors/regions</li>
+<li>Measuring development progress (e.g. SDGs)</li>
+<li>International comparisons and benchmarking</li>
+<li>Business decision-making and investment planning</li>
+</ul>
+<p><strong>Limitations:</strong> Data may be outdated, incomplete, collected using inconsistent methods, or subject to political influence.</p>`,
+      formulas:[
+        {name:'GDP (Expenditure approach)', f:'GDP = C + I + G + (X − M)'},
+        {name:'Crude Birth Rate', f:'CBR = (Births / Population) × 1000'},
+        {name:'Crude Death Rate', f:'CDR = (Deaths / Population) × 1000'},
+        {name:'Rate of Natural Increase', f:'RNI = CBR − CDR  (per 1000)'}
+      ],
+      example:`<strong>Example:</strong> Nigeria has Population = 220 million. In one year: Births = 8.8 million, Deaths = 2.2 million.<br>CBR = (8.8/220) × 1000 = 40 per 1000<br>CDR = (2.2/220) × 1000 = 10 per 1000<br>RNI = 40 − 10 = 30 per 1000 (population growing at 3% per year)`,
+      youtube:'https://www.youtube.com/results?search_query=economic+social+statistics+importance+Nigeria'
+    },
+    {
+      id:'sta213-3', num:'3.0', name:'Application of Index Numbers',
+      notes:`<p>An <strong>Index Number</strong> is a relative measure that shows how a variable (or group of variables) has changed over time or across locations, compared to a chosen reference point (base period = 100).</p>
+<p><strong>Types:</strong> Price index (e.g. CPI), Quantity index (production changes), Value index (total spending changes).</p>
+<p><strong>Consumer Price Index (CPI):</strong> Measures changes in the general price level of a basket of goods and services purchased by typical households. Used to measure inflation and adjust wages/pensions for cost of living.</p>
+<p><strong>Key Index Number Formulae:</strong></p>
+<ul>
+<li><strong>Laspeyres Index:</strong> Uses base-period quantities as weights. Tends to overstate price increases (base-period quantities may no longer reflect current consumption).</li>
+<li><strong>Paasche Index:</strong> Uses current-period quantities as weights. Tends to understate price increases. Requires data collection every period.</li>
+<li><strong>Fisher's Ideal Index:</strong> Geometric mean of Laspeyres and Paasche. Considered the best single index — satisfies time reversal and factor reversal tests.</li>
+</ul>
+<p><strong>Tests for a good index:</strong></p>
+<ul>
+<li><strong>Time Reversal Test:</strong> P₀₁ × P₁₀ = 1 (Fisher's passes, others fail)</li>
+<li><strong>Factor Reversal Test:</strong> Price index × Quantity index = Value index (Fisher's passes)</li>
+</ul>`,
+      formulas:[
+        {name:'Simple (unweighted) price index', f:'P₀₁ = (P₁/P₀) × 100'},
+        {name:'Laspeyres Price Index', f:'Lₚ = [Σ(P₁Q₀) / Σ(P₀Q₀)] × 100'},
+        {name:'Paasche Price Index', f:"Pₚ = [Σ(P₁Q₁) / Σ(P₀Q₁)] × 100"},
+        {name:"Fisher's Ideal Index", f:"F = √(Lₚ × Pₚ)"},
+        {name:'Laspeyres Quantity Index', f:'Lq = [Σ(Q₁P₀) / Σ(Q₀P₀)] × 100'},
+        {name:'Paasche Quantity Index', f:'Pq = [Σ(Q₁P₁) / Σ(Q₀P₁)] × 100'},
+        {name:'Real income / deflation', f:'Real value = Nominal value / (Price Index/100)'}
+      ],
+      example:`<strong>Example:</strong> 2 goods. P₀=(10,20), P₁=(12,25), Q₀=(5,4), Q₁=(4,5).<br>Lₚ = [(12×5+25×4)/(10×5+20×4)] × 100 = [(60+100)/(50+80)] × 100 = (160/130) × 100 = 123.1<br>Pₚ = [(12×4+25×5)/(10×4+20×5)] × 100 = [(48+125)/(40+100)] × 100 = (173/140) × 100 = 123.6<br>F = √(123.1 × 123.6) = √15,221.2 = 123.4`,
+      youtube:'https://www.youtube.com/results?search_query=index+numbers+Laspeyres+Paasche+Fisher+statistics'
+    },
+    {
+      id:'sta213-4', num:'4.0', name:'Standardization of Rates',
+      notes:`<p>A <strong>Crude Rate</strong> (e.g. crude death rate) is computed for an entire population without accounting for differences in the age structure. Comparing crude rates between populations with very different age distributions can be misleading.</p>
+<p><strong>Why standardize?</strong> An older population will naturally have a higher death rate than a younger one, even if health conditions are identical. Standardization removes this confounding effect, making valid comparisons possible.</p>
+<p><strong>Direct Standardization:</strong> Apply the observed age-specific rates of each study population to a single <em>standard population</em> structure. Compute the expected number of deaths/events in the standard population. Produces a Directly Standardized Rate (DSR).</p>
+<p><strong>Indirect Standardization:</strong> Apply the age-specific rates of a <em>standard population</em> to the actual age structure of each study population. Compare observed deaths to expected deaths using the Standardized Mortality Ratio (SMR).</p>
+<p><strong>Ratios and Proportions:</strong> A ratio compares two quantities. A proportion is a ratio where the numerator is part of the denominator. Both are fundamental in rate standardization.</p>`,
+      formulas:[
+        {name:'Crude rate', f:'Crude Rate = (Events / Total Population) × k\n(k = 1,000 or 100,000)'},
+        {name:'Age-specific rate', f:'ASRᵢ = (Events in age group i / Population in age group i) × k'},
+        {name:'Directly Standardized Rate (DSR)', f:'DSR = Σ(ASRᵢ × Wᵢ) / ΣWᵢ\n(Wᵢ = standard population weight for group i)'},
+        {name:'Expected deaths (indirect)', f:'Expected = Σ(Standard rateᵢ × Study popᵢ)'},
+        {name:'Standardized Mortality Ratio (SMR)', f:'SMR = Observed deaths / Expected deaths × 100\nSMR > 100: higher mortality than standard'},
+        {name:'Ratio', f:'Ratio = A / B'},
+        {name:'Proportion', f:'Proportion = A / (A+B)'}
+      ],
+      example:`<strong>Example (DSR):</strong> Two towns A and B being compared. Standard population has 60% aged 0–44 and 40% aged 45+.<br>Town A rates: 2/1000 (0–44), 25/1000 (45+)<br>DSR_A = 0.60×2 + 0.40×25 = 1.2 + 10.0 = 11.2 per 1000<br>Town B rates: 3/1000 (0–44), 20/1000 (45+)<br>DSR_B = 0.60×3 + 0.40×20 = 1.8 + 8.0 = 9.8 per 1000<br>After standardization, Town B has lower mortality despite higher crude rate (older population).`,
+      youtube:'https://www.youtube.com/results?search_query=direct+indirect+standardization+rates+demographics+statistics'
+    },
+    {
+      id:'sta213-5', num:'5.0', name:'Economic Time Series',
+      notes:`<p>A <strong>Time Series</strong> is a sequence of observations recorded at regular successive time intervals (e.g. monthly, quarterly, annually). Examples: monthly sales, annual GDP, daily stock prices, quarterly inflation.</p>
+<p><strong>Components of Time Series:</strong></p>
+<ul>
+<li><strong>Secular Trend (T):</strong> The long-term movement — the overall direction of the series over many years (upward or downward). Measured using least squares regression or moving averages.</li>
+<li><strong>Seasonal Variation (S):</strong> Regular, predictable fluctuations within a year due to weather, holidays, or customs. E.g. umbrella sales peak every rainy season.</li>
+<li><strong>Cyclical Variation (C):</strong> Irregular wave-like movements over several years, linked to business/economic cycles. Longer than one year but irregular in length.</li>
+<li><strong>Irregular/Random Variation (I):</strong> Unpredictable, erratic fluctuations caused by random events (strikes, floods, wars).</li>
+</ul>
+<p><strong>Models:</strong></p>
+<ul>
+<li><strong>Additive Model:</strong> Y = T + S + C + I (components add up; appropriate when seasonal variation is roughly constant)</li>
+<li><strong>Multiplicative Model:</strong> Y = T × S × C × I (appropriate when seasonal variation grows with the trend)</li>
+</ul>
+<p><strong>Moving Averages:</strong> Smooth data by replacing each observation with the average of its neighbours. Eliminates short-term fluctuations to reveal the underlying trend. For even-period data, a centred moving average (CMA) is used.</p>`,
+      formulas:[
+        {name:'3-point Moving Average', f:'MA₃(t) = (Yₜ₋₁ + Yₜ + Yₜ₊₁) / 3'},
+        {name:'4-point Centred Moving Average', f:'CMA₄(t) = (0.5Yₜ₋₂ + Yₜ₋₁ + Yₜ + Yₜ₊₁ + 0.5Yₜ₊₂) / 4'},
+        {name:'Trend equation (least squares)', f:'Ŷ = a + bt   (t = time period, coded)'},
+        {name:'Slope b', f:'b = [nΣtY − ΣtΣY] / [nΣt² − (Σt)²]'},
+        {name:'Intercept a', f:'a = (ΣY − bΣt) / n   or   a = Ȳ − bt̄'},
+        {name:'Seasonal Index (Additive)', f:'SI = Actual − Trend   (average for each season)'},
+        {name:'Seasonal Index (Multiplicative)', f:'SI = (Actual / Trend) × 100   (average for each season)'},
+        {name:'Deseasonalized value', f:'Y_deseas = Y − SI  (additive)   or   Y/SI × 100  (multiplicative)'}
+      ],
+      example:`<strong>Example (Moving Averages):</strong> Quarterly sales (₦000): Q1=40, Q2=48, Q3=52, Q4=44, Q1=46, Q2=50.<br>4-period MA centred at Q2-Q3 midpoint:<br>MA = (40+48+52+44)/4 = 46.0 → centred at middle of Q2 and Q3<br>CMA at Q3 = average of two consecutive 4-period MAs.`,
+      youtube:'https://www.youtube.com/results?search_query=time+series+analysis+trend+seasonal+variation+economics'
+    }
+  ]
+},
+{
+  id:'sta214', code:'STA 214', name:'Industrial Statistics I',
+  duration:'60 Hours (Lectures/Practicals)', unit:'3.0', icon:'🏭',
+  goal:'Expose the student to the application of statistics in planning and production processes in industries.',
+  topics:[
+    {
+      id:'sta214-1', num:'1.0–2.0', name:'Statistics in Industry and Process Control',
+      notes:`<p><strong>Statistics in Industry</strong> enables manufacturers to monitor quality, reduce defects, control processes, and make data-driven decisions. Key applications include: Statistical Quality Control (SQC), reliability testing, acceptance sampling, and Analysis of Variance (ANOVA).</p>
+<p><strong>Process Control</strong> is the use of statistical methods to monitor and control a manufacturing or business process. The goal is to keep the process stable (in control) and within specification limits.</p>
+<p><strong>Variation in processes:</strong> Every process has variation. Understanding its source is essential:</p>
+<ul>
+<li><strong>Chance (Common) Causes:</strong> Natural, inherent, random variation always present in a stable process. Cannot be eliminated without fundamentally changing the process. Reducing them requires management action (new equipment, better materials).</li>
+<li><strong>Assignable (Special) Causes:</strong> Specific, identifiable causes of unusual variation: machine malfunction, operator error, bad batch of material, environmental change. Process is "out of control." Can and should be corrected by the operator.</li>
+</ul>
+<p><strong>Detecting assignable causes:</strong> Using histograms (departure from normal shape) or probability paper (departure from straight line in a normal probability plot).</p>
+<p><strong>Specification Limits:</strong> Set by engineers/designers — the allowable range for a product characteristic. USL = Upper Specification Limit; LSL = Lower Specification Limit.</p>
+<p><strong>Process Capability:</strong> How well the process meets specifications. A capable process has Cp ≥ 1 (process spread fits within specification limits) and Cpk ≥ 1 (process is also centred).</p>`,
+      formulas:[
+        {name:'Process Capability Index Cp', f:'Cp = (USL − LSL) / 6σ\n(Cp ≥ 1.0: capable; ≥ 1.33: very capable)'},
+        {name:'Process Capability Cpk', f:'Cpk = min[(USL−μ)/3σ,  (μ−LSL)/3σ]'},
+        {name:'Process spread (natural tolerance)', f:'Natural Tolerance = 6σ'},
+        {name:'Sigma (from sample ranges)', f:'σ̂ = R̄ / d₂   (d₂ = control chart constant)'}
+      ],
+      example:`<strong>Example:</strong> USL=52, LSL=48, μ=50, σ=0.5.<br>Cp = (52−48)/(6×0.5) = 4/3 = 1.33 → Very capable<br>Cpk = min[(52−50)/1.5, (50−48)/1.5] = min[1.33, 1.33] = 1.33 → Centred and capable`,
+      youtube:'https://www.youtube.com/results?search_query=statistical+quality+control+process+control+variation+industry'
+    },
+    {
+      id:'sta214-2', num:'3.0', name:'Control Charts',
+      notes:`<p>A <strong>Control Chart</strong> (Shewhart Chart) is a time-series plot of a process characteristic with three horizontal lines: Center Line (CL), Upper Control Limit (UCL), and Lower Control Limit (LCL). Control limits are typically set at ±3σ from the mean, giving ~99.73% coverage for an in-control process.</p>
+<p><strong>Purpose:</strong> Distinguish between chance variation (normal) and assignable causes (abnormal). A process is "in control" when all points fall within limits and show no non-random patterns.</p>
+<p><strong>Types of Control Charts:</strong></p>
+<ul>
+<li><strong>X̄-chart (Mean chart):</strong> Monitors the process mean. Used with R-chart or S-chart.</li>
+<li><strong>R-chart (Range chart):</strong> Monitors process spread/variability using sample range.</li>
+<li><strong>S-chart:</strong> Monitors spread using sample standard deviation (better for n > 10).</li>
+<li><strong>p-chart:</strong> Monitors fraction (proportion) of defective items. For attribute data.</li>
+<li><strong>np-chart:</strong> Monitors number of defective items (fixed sample size).</li>
+<li><strong>c-chart:</strong> Monitors the count of defects per item (Poisson assumption).</li>
+<li><strong>u-chart:</strong> Monitors defects per unit (variable sample size).</li>
+</ul>
+<p><strong>Out-of-control signals (beyond ±3σ limits):</strong> A single point outside limits; 7+ points in a row on same side of CL; 6+ consecutive points trending in one direction; 2 of 3 consecutive points in zone A (>2σ from CL).</p>
+<p><strong>Control chart constants</strong> (A₂, D₃, D₄) are tabulated based on sample size n.</p>`,
+      formulas:[
+        {name:'X̄-chart Center Line', f:'CL = X̄̄  (grand mean of all sample means)'},
+        {name:'X̄-chart UCL and LCL', f:'UCL = X̄̄ + A₂R̄\nLCL = X̄̄ − A₂R̄'},
+        {name:'R-chart Center Line', f:'CL = R̄  (average range)'},
+        {name:'R-chart UCL and LCL', f:'UCL = D₄R̄\nLCL = D₃R̄'},
+        {name:'p-chart Center Line', f:'CL = p̄ = Total defectives / Total inspected'},
+        {name:'p-chart UCL and LCL', f:'UCL = p̄ + 3√(p̄(1−p̄)/n)\nLCL = max(0,  p̄ − 3√(p̄(1−p̄)/n))'},
+        {name:'c-chart Center Line', f:'CL = c̄  (average defects per unit)'},
+        {name:'c-chart UCL and LCL', f:'UCL = c̄ + 3√c̄\nLCL = max(0,  c̄ − 3√c̄)'},
+        {name:'Sample SD estimate from R̄', f:'σ̂ = R̄ / d₂'},
+        {name:'Control chart constants (n=4)', f:'A₂=0.729, D₃=0, D₄=2.282, d₂=2.059'}
+      ],
+      example:`<strong>Example (X̄ and R charts):</strong> k=5 samples of n=4. R̄=0.40, X̄̄=10.20.<br>X̄-chart: UCL = 10.20 + 0.729×0.40 = 10.49; LCL = 10.20 − 0.292 = 9.91<br>R-chart: UCL = 2.282×0.40 = 0.913; LCL = 0×0.40 = 0<br>Any sample mean outside [9.91, 10.49] signals out-of-control.`,
+      youtube:'https://www.youtube.com/results?search_query=control+charts+Xbar+R+chart+SPC+quality+control'
+    },
+    {
+      id:'sta214-3', num:'4.0', name:'Acceptance Sampling Schemes',
+      notes:`<p><strong>Acceptance Sampling</strong> is a statistical quality control technique where a batch (lot) of items is accepted or rejected based on inspecting a random sample from the batch — rather than 100% inspection. Used when inspection is costly, destructive, or time-consuming.</p>
+<p><strong>Types of Acceptance Sampling:</strong></p>
+<ul>
+<li><strong>Single Sampling Plan (n, c):</strong> Inspect n items from the lot. If number of defectives d ≤ c (acceptance number), accept the lot. If d > c, reject (or 100% inspect). Simplest and most common.</li>
+<li><strong>Double Sampling Plan:</strong> If decision from first sample is inconclusive, take a second sample. Reduces average inspection number when lot quality is very good or very bad.</li>
+<li><strong>Multiple Sampling Plan:</strong> Extension of double sampling — several rounds of small samples. Most complex to administer.</li>
+<li><strong>Sequential Sampling:</strong> Inspect items one at a time. After each item, decide: accept, reject, or continue. Minimum average inspection number.</li>
+</ul>
+<p><strong>Operating Characteristic (OC) Curve:</strong> A graph of the probability of accepting a lot P(A) vs. the true proportion defective p. Describes the discriminating power of the plan. Ideal OC curve would accept all lots with p < AQL and reject all with p > LTPD.</p>
+<p><strong>Key terms:</strong></p>
+<ul>
+<li><strong>AQL (Acceptable Quality Level):</strong> Maximum defect rate the consumer considers acceptable as a process average. High P(A) at AQL.</li>
+<li><strong>LTPD (Lot Tolerance Percent Defective):</strong> Maximum defect rate the consumer is willing to tolerate. Low P(A) at LTPD.</li>
+<li><strong>Producer's Risk (α):</strong> Probability of rejecting a lot at AQL (Type I error).</li>
+<li><strong>Consumer's Risk (β):</strong> Probability of accepting a lot at LTPD (Type II error).</li>
+</ul>`,
+      formulas:[
+        {name:'Single sampling decision rule', f:'Accept if: d ≤ c\nReject if: d > c\n(d = defectives found, c = acceptance number)'},
+        {name:'P(Accept) using Binomial', f:'P(A) = P(X ≤ c) = Σₓ₌₀ᶜ C(n,x) pˣ(1−p)ⁿ⁻ˣ'},
+        {name:'P(Accept) using Poisson approx', f:'P(A) = Σₓ₌₀ᶜ e^(−np)(np)ˣ/x!   (when n large, p small)'},
+        {name:'Average Outgoing Quality (AOQ)', f:'AOQ = p × P(A) × (N−n)/N\n(N = lot size, n = sample size)'},
+        {name:'Average Outgoing Quality Limit', f:'AOQL = max(AOQ over all p)'}
+      ],
+      example:`<strong>Example:</strong> Lot N=1000, single plan n=50, c=2. Lot has p=0.04 (4% defective).<br>Expected defectives np = 50×0.04 = 2<br>P(A) = P(X≤2) = P(X=0)+P(X=1)+P(X=2) using Binomial(50, 0.04)<br>≈ e^(−2)[1 + 2 + 2] = 0.1353 × 5 = 0.677 (Poisson approx)`,
+      youtube:'https://www.youtube.com/results?search_query=acceptance+sampling+OC+curve+single+double+sampling+plan'
+    }
+  ]
+},
+{
+  id:'mth212', code:'MTH 212', name:'Calculus II',
+  duration:'30 Hours', unit:'2.0', icon:'∫',
+  goal:'Broaden student understanding of the theory of calculus and develop ability to solve problems on calculus.',
+  topics:[
+    {
+      id:'mth212-1', num:'1.0', name:'Finite Double Series',
+      notes:`<p>A <strong>double series</strong> involves summing over two indices simultaneously. It represents the sum of a 2D array of numbers aᵢₖ. In statistics, double summations appear in computing variance of bivariate data, sum of squares in ANOVA, and matrix operations.</p>
+<p><strong>Properties of Double Summation:</strong></p>
+<ul>
+<li><strong>Commutativity:</strong> Order of summation can be interchanged (for finite sums)</li>
+<li><strong>Additivity:</strong> The double sum of a sum equals the sum of double sums</li>
+<li><strong>Homogeneity:</strong> Constants factor out of double summations</li>
+</ul>
+<p>Understanding double summation is essential for computing variance, ANOVA sums of squares, and multivariate statistics.</p>`,
+      formulas:[
+        {name:'Double summation notation', f:'Σᵢ₌₁ᵐ Σₖ₌₁ⁿ aᵢₖ'},
+        {name:'Commutativity of order', f:'Σᵢ Σₖ aᵢₖ = Σₖ Σᵢ aᵢₖ'},
+        {name:'Additive property', f:'Σᵢ Σₖ (aᵢₖ + bᵢₖ) = Σᵢ Σₖ aᵢₖ + Σᵢ Σₖ bᵢₖ'},
+        {name:'Homogeneous property', f:'Σᵢ Σₖ C·aᵢₖ = C · Σᵢ Σₖ aᵢₖ'},
+        {name:'Sum of 1 over i,k', f:'Σᵢ₌₁ᵐ Σₖ₌₁ⁿ 1 = m × n'}
+      ],
+      example:`<strong>Example:</strong> Evaluate Σᵢ₌₁² Σₖ₌₁³ (2i + k).<br>i=1: k=1→3, k=2→4, k=3→5: sum=12<br>i=2: k=1→5, k=2→6, k=3→7: sum=18<br>Total = 12 + 18 = 30`,
+      youtube:'https://www.youtube.com/results?search_query=double+summation+sigma+notation+calculus'
+    },
+    {
+      id:'mth212-2', num:'2.0', name:'Convergence of Infinite Series',
+      notes:`<p>An <strong>infinite series</strong> is the sum of infinitely many terms: Σaₙ = a₁ + a₂ + a₃ + ⋯. The partial sum Sₙ = a₁ + a₂ + ⋯ + aₙ. The series <strong>converges</strong> if Sₙ → L (finite limit); otherwise it <strong>diverges</strong>.</p>
+<p><strong>Tests for Convergence:</strong></p>
+<ul>
+<li><strong>Comparison Test:</strong> If 0 ≤ aₙ ≤ bₙ: if Σbₙ converges, Σaₙ converges. If Σaₙ diverges, Σbₙ diverges.</li>
+<li><strong>Ratio Test (D'Alembert's):</strong> L = lim|aₙ₊₁/aₙ|. If L < 1 → converge; L > 1 → diverge; L = 1 → inconclusive.</li>
+<li><strong>Root Test (Cauchy's):</strong> L = lim|aₙ|^(1/n). Same conclusion rule as ratio test.</li>
+<li><strong>Alternating Series Test (Leibniz):</strong> Σ(−1)ⁿaₙ converges if: aₙ → 0 and aₙ is decreasing.</li>
+</ul>
+<p><strong>Absolute vs Conditional Convergence:</strong> Σaₙ is absolutely convergent if Σ|aₙ| converges. Absolute convergence implies convergence.</p>`,
+      formulas:[
+        {name:"D'Alembert's Ratio Test", f:'L = lim(n→∞) |aₙ₊₁/aₙ|\nL<1: converge;  L>1: diverge;  L=1: inconclusive'},
+        {name:"Cauchy's Root Test", f:'L = lim(n→∞) |aₙ|^(1/n)\nSame rule as Ratio Test'},
+        {name:'Geometric series (converges if |r|<1)', f:'Σarⁿ = a/(1−r),   |r| < 1'},
+        {name:'Harmonic series (diverges)', f:'Σ(1/n) = 1 + 1/2 + 1/3 + ⋯ → ∞'},
+        {name:'p-series', f:'Σ(1/nᵖ): converges if p > 1; diverges if p ≤ 1'},
+        {name:'Necessary condition for convergence', f:'If Σaₙ converges → aₙ → 0 (but NOT sufficient)'}
+      ],
+      example:`<strong>Example (Ratio Test):</strong> Test Σ n!/nⁿ.<br>aₙ₊₁/aₙ = [(n+1)!/(n+1)^(n+1)] ÷ [n!/nⁿ]<br>= (n+1)·nⁿ/(n+1)^(n+1) = (n/(n+1))ⁿ → e⁻¹ ≈ 0.368 < 1<br>∴ Series converges.`,
+      youtube:'https://www.youtube.com/results?search_query=convergence+tests+ratio+root+comparison+infinite+series+calculus'
+    },
+    {
+      id:'mth212-3', num:'3.0', name:'Power Series (Taylor and Maclaurin)',
+      notes:`<p>A <strong>Power Series</strong> Σcₙ(x−a)ⁿ represents a function as an infinite polynomial. It converges within a radius of convergence |x−a| < R.</p>
+<p>A <strong>Taylor Series</strong> expands a function f(x) about any point x = a as an infinite sum of terms involving derivatives at a. It allows complex functions to be approximated by polynomials.</p>
+<p>A <strong>Maclaurin Series</strong> is a special case with expansion point a = 0.</p>
+<p><strong>Important applications:</strong> Approximating function values, finding limits (for indeterminate forms), solving differential equations, deriving probability distributions.</p>`,
+      formulas:[
+        {name:'Taylor Series about x = a', f:'f(x) = Σₙ₌₀^∞ f⁽ⁿ⁾(a)/n! × (x−a)ⁿ'},
+        {name:'Maclaurin Series (a=0)', f:"f(x) = f(0) + f'(0)x + f''(0)x²/2! + f'''(0)x³/3! + ⋯"},
+        {name:'eˣ Maclaurin', f:'eˣ = 1 + x + x²/2! + x³/3! + x⁴/4! + ⋯  (all x)'},
+        {name:'sin x Maclaurin', f:'sin x = x − x³/3! + x⁵/5! − x⁷/7! + ⋯  (all x)'},
+        {name:'cos x Maclaurin', f:'cos x = 1 − x²/2! + x⁴/4! − x⁶/6! + ⋯  (all x)'},
+        {name:'ln(1+x) Maclaurin', f:'ln(1+x) = x − x²/2 + x³/3 − x⁴/4 + ⋯  (−1 < x ≤ 1)'},
+        {name:'(1+x)ⁿ Binomial series', f:'(1+x)ⁿ = 1 + nx + n(n−1)x²/2! + ⋯  (|x| < 1)'},
+        {name:'Taylor polynomial of degree n', f:'Pₙ(x) = Σₖ₌₀ⁿ f⁽ᵏ⁾(a)/k! × (x−a)ᵏ'},
+        {name:'Remainder (Lagrange form)', f:'Rₙ(x) = f⁽ⁿ⁺¹⁾(c)/(n+1)! × (x−a)ⁿ⁺¹  for some c between a,x'}
+      ],
+      example:`<strong>Example:</strong> Expand e^(−x²) as a Maclaurin series (first 4 terms).<br>Substitute −x² for x in eˣ:<br>e^(−x²) = 1 + (−x²) + (−x²)²/2! + (−x²)³/3! + ⋯<br>= 1 − x² + x⁴/2 − x⁶/6 + ⋯<br>(Used in probability — related to the normal distribution)`,
+      youtube:'https://www.youtube.com/results?search_query=Taylor+Maclaurin+series+power+series+calculus'
+    },
+    {
+      id:'mth212-4', num:'4.0', name:"Limits and L'Hôpital's Rule",
+      notes:`<p><strong>Indeterminate Forms</strong> arise when direct substitution in a limit gives an undefined expression. They require special techniques to evaluate.</p>
+<p>The seven indeterminate forms: 0/0, ∞/∞, 0×∞, ∞−∞, 0⁰, 1^∞, ∞⁰.</p>
+<p><strong>L'Hôpital's Rule:</strong> If lim f(x)/g(x) gives 0/0 or ±∞/∞ form, and if f, g are differentiable near a (with g'(x) ≠ 0), then: lim f(x)/g(x) = lim f'(x)/g'(x). Apply repeatedly if needed until a determinate form is obtained.</p>
+<p><strong>Converting other forms to 0/0 or ∞/∞:</strong></p>
+<ul>
+<li>0×∞: write as f·g = f/(1/g) or g/(1/f)</li>
+<li>∞−∞: use algebraic manipulation (common denominator, multiply by conjugate)</li>
+<li>0⁰, 1^∞, ∞⁰: let y = f^g, take ln y = g·ln f, find limit of ln y, then answer = e^(limit)</li>
+</ul>`,
+      formulas:[
+        {name:"L'Hôpital's Rule (0/0 or ∞/∞ form)", f:"lim[x→a] f(x)/g(x) = lim[x→a] f'(x)/g'(x)"},
+        {name:'Convert 0×∞', f:'f·g = f / (1/g)  →  then apply rule'},
+        {name:'Convert 1^∞, 0⁰, ∞⁰ form', f:'y = f^g  →  ln y = g·ln f  →  find lim of ln y  →  answer = e^L'},
+        {name:'Important limit (sine)', f:'lim(x→0) sin(x)/x = 1'},
+        {name:'Important limit (exponential)', f:'lim(x→0) (1+x)^(1/x) = e'},
+        {name:'Important limit (natural log)', f:'lim(x→0) ln(1+x)/x = 1'}
+      ],
+      example:`<strong>Example 1 (0/0):</strong> lim(x→0) (eˣ−1)/x<br>Apply rule: lim eˣ/1 = e⁰ = 1<br><br><strong>Example 2 (1^∞):</strong> lim(x→∞) (1+1/x)ˣ<br>ln y = x·ln(1+1/x) → 0×∞ form<br>= ln(1+1/x)/(1/x) → 0/0 → apply rule → limit = 1<br>y = e¹ = e`,
+      youtube:"https://www.youtube.com/results?search_query=L'Hopital's+rule+indeterminate+forms+limits+calculus"
+    },
+    {
+      id:'mth212-5', num:'5.0', name:'Fourier Series',
+      notes:`<p>A <strong>Fourier Series</strong> represents a periodic function f(x) with period 2L as an infinite sum of sines and cosines. It decomposes a complex periodic signal into its fundamental frequency components.</p>
+<p><strong>Applications:</strong> Signal processing, vibration analysis, heat equation, wave analysis, electrical circuit analysis.</p>
+<p>For a function on [−π, π] (L=π), the Fourier series uses integer multiples of the fundamental frequency 1/2π.</p>
+<p><strong>Even functions:</strong> f(−x) = f(x) → only cosine terms (bₙ = 0). <strong>Odd functions:</strong> f(−x) = −f(x) → only sine terms (a₀ = aₙ = 0).</p>
+<p><strong>Convergence (Dirichlet's theorem):</strong> At points of continuity, Fourier series converges to f(x). At jump discontinuities, it converges to the average of the left and right limits.</p>`,
+      formulas:[
+        {name:'Fourier Series (period 2L)', f:'f(x) = a₀/2 + Σₙ₌₁^∞ [aₙcos(nπx/L) + bₙsin(nπx/L)]'},
+        {name:'a₀ coefficient', f:'a₀ = (1/L) ∫₋ₗᴸ f(x) dx'},
+        {name:'aₙ coefficient', f:'aₙ = (1/L) ∫₋ₗᴸ f(x) cos(nπx/L) dx,  n=1,2,3…'},
+        {name:'bₙ coefficient', f:'bₙ = (1/L) ∫₋ₗᴸ f(x) sin(nπx/L) dx,  n=1,2,3…'},
+        {name:'Fourier Series (period 2π, L=π)', f:'f(x) = a₀/2 + Σ[aₙcos(nx) + bₙsin(nx)]'},
+        {name:'aₙ for period 2π', f:'aₙ = (1/π) ∫₋π^π f(x)cos(nx) dx'},
+        {name:'bₙ for period 2π', f:'bₙ = (1/π) ∫₋π^π f(x)sin(nx) dx'},
+        {name:"Parseval's identity", f:'(1/L)∫₋ₗᴸ [f(x)]² dx = a₀²/2 + Σ(aₙ²+bₙ²)'}
+      ],
+      example:`<strong>Example:</strong> f(x) = x for −π ≤ x ≤ π (odd function, period 2π).<br>a₀ = 0, aₙ = 0 (f is odd × even = odd, integral=0 over symmetric interval)<br>bₙ = (1/π)∫₋π^π x·sin(nx)dx = 2(−1)^(n+1)/n<br>f(x) = 2[sin x − sin(2x)/2 + sin(3x)/3 − ⋯]`,
+      youtube:'https://www.youtube.com/results?search_query=Fourier+series+coefficients+tutorial+calculus'
+    },
+    {
+      id:'mth212-6', num:'6.0–7.0', name:'Double Integration and Improper Integrals',
+      notes:`<p>A <strong>Double Integral</strong> ∬ f(x,y) dA extends integration to functions of two variables over a 2D region R. It computes volumes under surfaces, areas, masses, probabilities (multivariate distributions), and moments.</p>
+<p><strong>Evaluating double integrals:</strong> Use iterated (repeated) integration. Fix one variable and integrate the other, then integrate the result.</p>
+<p><strong>Changing order of integration:</strong> Sometimes swapping the order of integration simplifies the computation. Always re-examine the limits carefully when changing order.</p>
+<p><strong>Polar Coordinates:</strong> Useful when region R is circular or the integrand contains x²+y². The Jacobian of transformation is r (so dx dy = r dr dθ).</p>
+<p><strong>Improper Integrals:</strong> Definite integrals that have: infinite limits of integration, or an integrand that is unbounded within the interval. Evaluate using limits. If the limit exists (finite), the integral converges; otherwise diverges.</p>`,
+      formulas:[
+        {name:'Double integral (iterated)', f:'∬_R f(x,y) dA = ∫ₐᵇ [∫_{g₁(x)}^{g₂(x)} f(x,y) dy] dx'},
+        {name:'Changing order of integration', f:'∫ₐᵇ ∫_{h₁(y)}^{h₂(y)} f(x,y) dx dy  (redefine limits)'},
+        {name:'Polar coordinates substitution', f:'x = r cosθ,  y = r sinθ\ndx dy = r dr dθ'},
+        {name:'Double integral in polar form', f:'∬ f(x,y) dA = ∫∫ f(r cosθ, r sinθ) · r dr dθ'},
+        {name:'Area of region R', f:'Area = ∬_R 1 dA'},
+        {name:'Volume under surface', f:'V = ∬_R f(x,y) dA  (when f(x,y) ≥ 0)'},
+        {name:'Improper integral (infinite upper limit)', f:'∫ₐ^∞ f(x) dx = lim(b→∞) ∫ₐᵇ f(x) dx'},
+        {name:'Improper integral (infinite lower limit)', f:'∫₋∞ᵇ f(x) dx = lim(a→−∞) ∫ₐᵇ f(x) dx'},
+        {name:'Improper integral (both limits infinite)', f:'∫₋∞^∞ f(x) dx = lim(a→−∞,b→∞) ∫ₐᵇ f(x) dx'},
+        {name:'Improper integral (discontinuity at b)', f:'∫ₐᵇ f(x)dx = lim(c→b⁻) ∫ₐᶜ f(x)dx'}
+      ],
+      example:`<strong>Example (Double Integral):</strong> ∫₀² ∫₀¹ (x²+y) dy dx<br>Inner: ∫₀¹ (x²+y) dy = [x²y + y²/2]₀¹ = x² + 1/2<br>Outer: ∫₀² (x² + 1/2) dx = [x³/3 + x/2]₀² = 8/3 + 1 = 11/3`,
+      youtube:'https://www.youtube.com/results?search_query=double+integral+iterated+integral+polar+coordinates+calculus'
+    }
+  ]
+},
+{
+  id:'mth213', code:'MTH 213', name:'Linear Algebra',
+  duration:'30 Hours', unit:'2.0', icon:'🔢',
+  goal:'Introduce the student to the knowledge of matrix algebra and its applications.',
+  topics:[
+    {
+      id:'mth213-1', num:'1.0', name:'Matrices and their Algebra',
+      notes:`<p>A <strong>Matrix</strong> is a rectangular array of numbers (elements/entries) arranged in m rows and n columns. An m×n matrix has m rows and n columns. A square matrix has m = n.</p>
+<p><strong>Types of Matrices:</strong> Zero/Null (all entries 0), Identity I (1s on diagonal), Diagonal (non-zero only on diagonal), Symmetric (A = Aᵀ), Skew-symmetric (A = −Aᵀ), Upper/Lower triangular, Orthogonal (AᵀA = I).</p>
+<p><strong>Matrix Multiplication:</strong> Defined only when number of columns of A = number of rows of B. (m×n)(n×p) = (m×p) matrix. (AB)ᵢⱼ = sum of products of i-th row of A with j-th column of B. In general AB ≠ BA (not commutative).</p>
+<p><strong>Rank of a Matrix:</strong> The number of linearly independent rows (= linearly independent columns). Equal to the number of non-zero rows in row-echelon form. Maximum rank of an m×n matrix is min(m, n).</p>
+<p><strong>Transpose Aᵀ:</strong> Matrix obtained by swapping rows and columns. (Aᵀ)ᵢⱼ = Aⱼᵢ.</p>`,
+      formulas:[
+        {name:'Matrix element notation', f:'A = [aᵢⱼ],  aᵢⱼ is element in row i, column j'},
+        {name:'Matrix multiplication element', f:'(AB)ᵢⱼ = Σₖ aᵢₖ bₖⱼ'},
+        {name:'Transpose properties', f:'(AB)ᵀ = BᵀAᵀ\n(A+B)ᵀ = Aᵀ + Bᵀ\n(Aᵀ)ᵀ = A'},
+        {name:'Identity matrix property', f:'AI = IA = A'},
+        {name:'Distributive law', f:'A(B+C) = AB + AC\n(A+B)C = AC + BC'},
+        {name:'Associative law', f:'(AB)C = A(BC)'}
+      ],
+      example:`<strong>Example (Multiplication):</strong> A=[[1,2],[3,4]], B=[[2,0],[1,3]].<br>AB = [[1×2+2×1, 1×0+2×3],[3×2+4×1, 3×0+4×3]]<br>= [[4, 6],[10, 12]]<br><br><strong>Check:</strong> BA = [[2,4],[10,14]] ≠ AB → Matrix multiplication is NOT commutative.`,
+      youtube:'https://www.youtube.com/results?search_query=matrices+algebra+multiplication+transpose+linear+algebra'
+    },
+    {
+      id:'mth213-2', num:'2.0', name:'Determinants',
+      notes:`<p>The <strong>Determinant</strong> det(A) or |A| is a scalar function defined for square matrices. It encodes important geometric and algebraic information about the matrix: a matrix is invertible iff det(A) ≠ 0.</p>
+<p><strong>Properties of Determinants:</strong></p>
+<ul>
+<li>det(I) = 1</li>
+<li>det(AB) = det(A)·det(B)</li>
+<li>det(Aᵀ) = det(A)</li>
+<li>det(A⁻¹) = 1/det(A)</li>
+<li>det(kA) = kⁿ det(A) for n×n matrix</li>
+<li>Swapping two rows → changes sign of det</li>
+<li>If a row is all zeros → det = 0</li>
+<li>If two rows are identical → det = 0</li>
+<li>Adding a multiple of one row to another → det unchanged</li>
+</ul>
+<p><strong>Cofactor Expansion (Laplace expansion):</strong> Can expand along any row or column. The cofactor Cᵢⱼ = (−1)^(i+j) × Mᵢⱼ where Mᵢⱼ is the minor (determinant of submatrix with row i and column j deleted).</p>
+<p><strong>Adjugate (Adjoint):</strong> Transpose of the cofactor matrix. Used to compute the matrix inverse.</p>`,
+      formulas:[
+        {name:'2×2 determinant', f:'|A| = |[a b; c d]| = ad − bc'},
+        {name:'3×3 determinant (expansion along row 1)', f:'|A| = a₁₁C₁₁ + a₁₂C₁₂ + a₁₃C₁₃'},
+        {name:'Cofactor', f:'Cᵢⱼ = (−1)^(i+j) · Mᵢⱼ'},
+        {name:'2×2 inverse', f:'A⁻¹ = (1/|A|) × [[d, −b],[−c, a]]'},
+        {name:'General inverse formula', f:'A⁻¹ = adj(A) / det(A)'},
+        {name:'Adjugate (adjoint)', f:'adj(A) = [Cᵢⱼ]ᵀ  (transpose of cofactor matrix)'},
+        {name:'Existence of inverse condition', f:'A⁻¹ exists iff det(A) ≠ 0'},
+        {name:'Inverse verification', f:'A · A⁻¹ = A⁻¹ · A = I'}
+      ],
+      example:`<strong>Example:</strong> A = [[3,1,2],[1,2,1],[2,1,3]].<br>Expand along row 1:<br>det(A) = 3[(2×3−1×1)] − 1[(1×3−1×2)] + 2[(1×1−2×2)]<br>= 3(5) − 1(1) + 2(−3) = 15 − 1 − 6 = 8`,
+      youtube:'https://www.youtube.com/results?search_query=determinants+2x2+3x3+cofactor+expansion+linear+algebra'
+    },
+    {
+      id:'mth213-3', num:'3.0', name:'Solution of Linear Equations',
+      notes:`<p>A <strong>system of linear equations</strong> can be written in matrix form as AX = B where A is the n×n coefficient matrix, X is the n×1 column vector of unknowns, and B is the n×1 right-hand-side vector.</p>
+<p><strong>Consistency:</strong> The system AX = B is consistent (has at least one solution) iff rank(A) = rank([A|B]). Unique solution iff rank(A) = rank([A|B]) = n. Infinitely many solutions iff rank(A) = rank([A|B]) < n. Inconsistent iff rank(A) < rank([A|B]).</p>
+<p><strong>Gaussian Elimination:</strong> Transform the augmented matrix [A|B] to row-echelon form using elementary row operations: swap rows, multiply row by non-zero scalar, add multiple of one row to another. Then back-substitute.</p>
+<p><strong>Gauss-Jordan Elimination:</strong> Continue to reduced row-echelon form (RREF) — leading entry in each row is 1, and it's the only non-zero entry in its column. Solution read directly.</p>
+<p><strong>Cramer's Rule:</strong> For a unique solution (det(A) ≠ 0): xᵢ = det(Aᵢ)/det(A), where Aᵢ is the matrix A with the i-th column replaced by B.</p>`,
+      formulas:[
+        {name:'Matrix form of linear system', f:'AX = B  →  X = A⁻¹B  (if det(A) ≠ 0)'},
+        {name:"Cramer's Rule", f:'xᵢ = det(Aᵢ) / det(A)\n(Aᵢ = A with i-th column replaced by B)'},
+        {name:'Consistency condition', f:'rank(A) = rank([A|B]): consistent\nrank(A) < rank([A|B]): inconsistent'},
+        {name:'Unique solution condition', f:'rank(A) = rank([A|B]) = n  (n = number of unknowns)'},
+        {name:'Row operations (elementary)', f:'R᷊ ↔ Rⱼ  (swap)\nkRᵢ  (multiply)\nRᵢ + kRⱼ → Rᵢ  (add multiple)'}
+      ],
+      example:`<strong>Example (Cramer's Rule):</strong> 2x+y=5, x+3y=10.<br>A=[[2,1],[1,3]], det(A)=6−1=5<br>A₁=[[5,1],[10,3]], det(A₁)=15−10=5 → x=5/5=1<br>A₂=[[2,5],[1,10]], det(A₂)=20−5=15 → y=15/5=3<br>Solution: x=1, y=3. Check: 2(1)+3=5 ✓ and 1+3(3)=10 ✓`,
+      youtube:"https://www.youtube.com/results?search_query=Cramer's+rule+Gaussian+elimination+linear+equations+solutions"
+    },
+    {
+      id:'mth213-4', num:'4.0', name:'Vectors and their Applications',
+      notes:`<p>A <strong>Vector</strong> is a mathematical object with both magnitude and direction. Denoted as bold <strong>v</strong> or v⃗. In component form in 3D: v = (v₁, v₂, v₃) = v₁î + v₂ĵ + v₃k̂.</p>
+<p>Vectors are fundamental to representing physical quantities: displacement, velocity, acceleration, force, electric/magnetic fields.</p>
+<p><strong>Scalar (Dot) Product a·b:</strong> Result is a scalar. Used to find angle between vectors, test perpendicularity (a·b = 0 iff a ⊥ b), compute projections, and work done by force.</p>
+<p><strong>Vector (Cross) Product a×b:</strong> Result is a vector perpendicular to both a and b (direction by right-hand rule). Magnitude = area of parallelogram formed by a and b. Used to find normal to a plane, area, torque, angular momentum.</p>
+<p><strong>Coplanar vectors:</strong> Vectors lying in the same plane. Three vectors are coplanar iff their scalar triple product = 0.</p>`,
+      formulas:[
+        {name:'Magnitude of vector', f:'|v| = √(v₁² + v₂² + v₃²)'},
+        {name:'Unit vector', f:'v̂ = v / |v|'},
+        {name:'Dot product', f:'a·b = a₁b₁ + a₂b₂ + a₃b₃ = |a||b|cos θ'},
+        {name:'Angle between vectors', f:'cos θ = (a·b) / (|a||b|)'},
+        {name:'Perpendicularity test', f:'a ⊥ b  iff  a·b = 0'},
+        {name:'Projection of a onto b', f:'proj_b(a) = (a·b/|b|²) × b'},
+        {name:'Cross product (component form)', f:'a×b = (a₂b₃−a₃b₂, a₃b₁−a₁b₃, a₁b₂−a₂b₁)'},
+        {name:'Magnitude of cross product', f:'|a×b| = |a||b|sin θ  (= area of parallelogram)'},
+        {name:'Parallelism test', f:'a ∥ b  iff  a×b = 0'},
+        {name:'Scalar triple product', f:'a·(b×c) = |a b c| (determinant)  → 0 if coplanar'},
+        {name:'Parallelogram law of addition', f:'R = A + B  (diagonal of parallelogram)'}
+      ],
+      example:`<strong>Example:</strong> a=(2,1,−1), b=(1,3,2).<br>a·b = 2+3−2 = 3<br>|a|=√6, |b|=√14<br>cos θ = 3/(√6 × √14) = 3/√84 ≈ 0.327 → θ ≈ 70.9°<br>a×b = (1×2−(−1)×3, (−1)×1−2×2, 2×3−1×1) = (5, −5, 5)`,
+      youtube:'https://www.youtube.com/results?search_query=vectors+dot+product+cross+product+applications+linear+algebra'
+    },
+    {
+      id:'mth213-5', num:'5.0', name:'Eigenvalues and Eigenvectors',
+      notes:`<p>For a square matrix A, a non-zero vector <strong>v</strong> is an <strong>eigenvector</strong> with corresponding <strong>eigenvalue</strong> λ if Av = λv. The matrix A stretches (or compresses/reflects) v without changing its direction — it only scales it by λ.</p>
+<p><strong>Finding eigenvalues:</strong> Av = λv rearranges to (A−λI)v = 0. For non-zero solutions v to exist, the coefficient matrix (A−λI) must be singular: det(A−λI) = 0. This is the <strong>characteristic equation</strong>.</p>
+<p><strong>Finding eigenvectors:</strong> For each eigenvalue λ, solve (A−λI)v = 0 using row reduction. The solution space is the <strong>eigenspace</strong> corresponding to λ.</p>
+<p><strong>Applications:</strong> PCA (Principal Component Analysis), Markov chains, differential equations, structural dynamics, Google's PageRank algorithm, quantum mechanics.</p>
+<p><strong>Properties:</strong> Trace of A = sum of eigenvalues; det(A) = product of eigenvalues. If λ is eigenvalue of A, then 1/λ is eigenvalue of A⁻¹.</p>`,
+      formulas:[
+        {name:'Eigenvalue equation', f:'Av = λv   →   (A−λI)v = 0'},
+        {name:'Characteristic equation', f:'det(A−λI) = 0'},
+        {name:'2×2 characteristic polynomial', f:'λ² − tr(A)λ + det(A) = 0'},
+        {name:'Trace of matrix', f:'tr(A) = a₁₁ + a₂₂ + ⋯ + aₙₙ = Σλᵢ'},
+        {name:'Determinant and eigenvalues', f:'det(A) = λ₁ × λ₂ × ⋯ × λₙ = Πλᵢ'},
+        {name:'Eigenvalue of Aⁿ', f:'If Av=λv, then Aⁿv = λⁿv'},
+        {name:'Eigenvalue of A⁻¹', f:'If Av=λv, then A⁻¹v = (1/λ)v'}
+      ],
+      example:`<strong>Example:</strong> A = [[5,2],[2,5]].<br>Characteristic eq: det([[5−λ,2],[2,5−λ]]) = (5−λ)²−4 = 0<br>λ²−10λ+21 = 0 → (λ−7)(λ−3) = 0<br>λ₁=7, λ₂=3<br>For λ=7: (A−7I)v=0 → [[-2,2],[2,-2]]v=0 → v=(1,1)<br>For λ=3: (A−3I)v=0 → [[2,2],[2,2]]v=0 → v=(1,−1)`,
+      youtube:'https://www.youtube.com/results?search_query=eigenvalues+eigenvectors+2x2+3x3+linear+algebra+tutorial'
+    }
+  ]
+},
+{
+  id:'com215', code:'COM 215', name:'Computer Packages II',
+  duration:'60 Hours', unit:'3.0', icon:'💻',
+  goal:'Enable the student to acquire a better understanding of standard computer packages.',
+  topics:[
+    {
+      id:'com215-1', num:'1.0', name:'Common Graphics Packages',
+      notes:`<p><strong>Graphics Packages</strong> are software applications for creating, editing, and managing visual content. They are essential for design, publishing, and technical drawing.</p>
+<p><strong>Categories of Graphics:</strong></p>
+<ul>
+<li><strong>Raster/Bitmap graphics:</strong> Made of pixels (picture elements). Resolution-dependent — quality degrades when enlarged. Examples: photographs, scanned images. Formats: JPEG, PNG, BMP, GIF. Software: Adobe Photoshop, MS Paint, GIMP.</li>
+<li><strong>Vector graphics:</strong> Made of mathematical shapes (lines, curves, polygons). Fully scalable without quality loss. Ideal for logos, diagrams, typography. Formats: SVG, AI, EPS. Software: CorelDRAW, Adobe Illustrator, Inkscape.</li>
+</ul>
+<p><strong>DTP (Desktop Publishing):</strong> Combining text and graphics for print/digital publications. Products: newsletters, brochures, certificates, letterheads, magazines. Software: Microsoft Publisher, Adobe InDesign. Distinct from CAD — DTP is for publishing, CAD is for engineering design.</p>
+<p><strong>Presentation Software:</strong> Microsoft PowerPoint, LibreOffice Impress. Create slide decks with text, images, animations, transitions. Views: Normal (edit mode), Slide Sorter (overview), Reading View, Presenter View (with notes).</p>`,
+      formulas:[],
+      example:`<strong>DTP Task:</strong> Design a one-page company newsletter using CorelDRAW: create a masthead with company logo (vector), insert product photo (bitmap), add text columns with justified alignment, and save as PDF for print.<br><br><strong>Key distinction:</strong> Increase logo from 2cm to 20cm in CorelDRAW (vector) → no quality loss. Same operation on JPEG photo → becomes pixelated.`,
+      youtube:'https://www.youtube.com/results?search_query=graphics+packages+raster+vector+DTP+desktop+publishing+tutorial'
+    },
+    {
+      id:'com215-2', num:'2.0', name:'Computer Aided Design (CAD)',
+      notes:`<p><strong>CAD (Computer-Aided Design)</strong> uses software to create precise 2D technical drawings and 3D models for engineering, architecture, product design, and manufacturing. Replaces manual drafting, allows easy editing, and enables precise measurement.</p>
+<p><strong>Key CAD software: AutoCAD</strong> (Autodesk) — industry standard for 2D drafting and 3D modeling.</p>
+<p><strong>Core AutoCAD Concepts:</strong></p>
+<ul>
+<li><strong>Layers:</strong> Separate drawing elements into logical groups. Each layer can have its own color, line type, and line weight. Toggle visibility on/off.</li>
+<li><strong>Drawing commands:</strong> LINE, CIRCLE, ARC, RECTANGLE, POLYLINE, ELLIPSE, POLYGON.</li>
+<li><strong>Editing commands:</strong> MOVE, COPY, ROTATE, SCALE, MIRROR, TRIM, EXTEND, OFFSET.</li>
+<li><strong>Projection types:</strong> Orthographic (front/side/top views in 2D), Isometric (3D-looking 2D drawing), 3D perspective.</li>
+<li><strong>Blocks:</strong> Groups of objects saved as reusable units (like a symbol library).</li>
+<li><strong>Attributes:</strong> Text information tags attached to blocks (e.g. component number, description).</li>
+<li><strong>External References (Xrefs):</strong> Link external drawing files into the current drawing.</li>
+<li><strong>3D Modeling:</strong> Solid models, surface models. Commands: EXTRUDE, REVOLVE, UNION, SUBTRACT.</li>
+</ul>`,
+      formulas:[],
+      example:`<strong>AutoCAD Drawing Workflow:</strong><br>1. UNITS → set to millimetres<br>2. LIMITS → set drawing boundary<br>3. LAYER → create layers (Walls, Dimensions, Annotations)<br>4. LINE/CIRCLE/ARC → draw geometry<br>5. DIMENSION → add measurements<br>6. HATCH → add material patterns<br>7. PLOT → select printer/paper/scale → print`,
+      youtube:'https://www.youtube.com/results?search_query=AutoCAD+tutorial+beginners+2D+drawing+layers'
+    },
+    {
+      id:'com215-3', num:'3.0', name:'Database Management',
+      notes:`<p>A <strong>Database</strong> is an organized, structured collection of related data stored so that it can be easily accessed, managed, and updated. A <strong>DBMS (Database Management System)</strong> is software that manages databases.</p>
+<p><strong>Example DBMS: Microsoft Access</strong> — widely used for small to medium-scale desktop databases.</p>
+<p><strong>Database Structure (Relational Database):</strong></p>
+<ul>
+<li><strong>Table:</strong> Stores data in rows (records/tuples) and columns (fields/attributes). Primary key uniquely identifies each row.</li>
+<li><strong>Query:</strong> Retrieves, filters, and manipulates data using SQL (Structured Query Language).</li>
+<li><strong>Form:</strong> User-friendly interface for entering and editing data.</li>
+<li><strong>Report:</strong> Formatted printable output of query results or table data.</li>
+<li><strong>Relationships:</strong> One-to-One, One-to-Many (most common), Many-to-Many (requires junction table).</li>
+</ul>
+<p><strong>Functions of a DBMS:</strong> Data storage and retrieval, data security (access control), data integrity (validation rules, constraints), concurrent access management, backup and recovery.</p>`,
+      formulas:[],
+      example:`<strong>Example (Microsoft Access):</strong> Student Database with two tables:<br>Students: [StudentID (PK), Name, DOB, State]<br>Courses: [CourseID (PK), CourseName, Units]<br>Enrollment: [StudentID (FK), CourseID (FK), Semester, Grade]<br><br>SQL Query: SELECT Name, CourseName FROM Students, Enrollment, Courses WHERE Students.StudentID=Enrollment.StudentID AND Enrollment.CourseID=Courses.CourseID`,
+      youtube:'https://www.youtube.com/results?search_query=Microsoft+Access+database+tutorial+beginners'
+    },
+    {
+      id:'com215-4', num:'4.0', name:'Data Analysis Packages (SPSS)',
+      notes:`<p><strong>SPSS (Statistical Package for the Social Sciences)</strong> is one of the most widely used software packages for statistical analysis in social sciences, health, business, and education. Now called IBM SPSS Statistics.</p>
+<p><strong>SPSS Interface:</strong></p>
+<ul>
+<li><strong>Data View:</strong> Spreadsheet-like view showing actual data (rows = cases, columns = variables)</li>
+<li><strong>Variable View:</strong> Define variable properties: Name, Type, Width, Decimals, Label, Values, Missing, Measure (scale/ordinal/nominal)</li>
+<li><strong>Output Viewer:</strong> Shows all analysis results in a navigable window</li>
+</ul>
+<p><strong>Key SPSS Procedures:</strong></p>
+<ul>
+<li>Frequencies (Analyze → Descriptive Statistics → Frequencies)</li>
+<li>Descriptives (mean, SD, min, max, range)</li>
+<li>Crosstabs with chi-square test</li>
+<li>One-sample, independent, and paired t-tests</li>
+<li>One-way ANOVA</li>
+<li>Correlation (Pearson, Spearman)</li>
+<li>Linear Regression</li>
+<li>Charts: histograms, bar charts, scatter plots, box plots</li>
+</ul>
+<p><strong>Reading SPSS output:</strong> Focus on the significance value (Sig. or p-value). If p < 0.05, result is statistically significant at 5% level.</p>`,
+      formulas:[],
+      example:`<strong>SPSS Workflow for t-test:</strong><br>1. Enter data in Data View (one column per variable)<br>2. Define variables in Variable View (set measurement level)<br>3. Analyze → Compare Means → One-Sample T Test<br>4. Move variable to "Test Variable(s)", enter Test Value (H₀ value)<br>5. Click OK → Read t, df, Sig.(2-tailed) in output<br>If Sig. < 0.05: reject H₀`,
+      youtube:'https://www.youtube.com/results?search_query=SPSS+statistics+tutorial+data+analysis+beginners'
+    }
+  ]
+},
+{
+  id:'eed216', code:'EED 216', name:'Practice of Entrepreneurship',
+  duration:'30 Hours', unit:'2.0', icon:'🚀',
+  goal:'Equip students with the knowledge of business ideas, opportunity identification, and enterprise development.',
+  topics:[
+    {
+      id:'eed216-1', num:'1.0', name:'Generating Business Ideas',
+      notes:`<p><strong>Entrepreneurship</strong> is the process of identifying opportunities, creating value, and assuming risk to build and manage a business enterprise. An <strong>Entrepreneur</strong> is someone who organizes, manages, and takes on the risks of a business.</p>
+<p>A <strong>Business Opportunity</strong> is a favourable circumstance or need in the market that can be exploited profitably. Not every idea is an opportunity — an opportunity must be feasible, timely, and value-creating.</p>
+<p><strong>Sources of Business Ideas:</strong></p>
+<ul>
+<li>Personal skills, hobbies, and past experience</li>
+<li>Observation of problems in daily life (unmet needs)</li>
+<li>Market research and consumer surveys</li>
+<li>Technology changes (new inventions creating new products)</li>
+<li>Import substitution (producing locally what is currently imported)</li>
+<li>Imitation and improvement of existing products/services</li>
+</ul>
+<p><strong>SWOT Analysis</strong> is a structured tool for evaluating business opportunities:<br>S = Strengths (internal, positive), W = Weaknesses (internal, negative), O = Opportunities (external, positive), T = Threats (external, negative).</p>
+<p><strong>Market Survey:</strong> A systematic study of potential customers to assess demand, identify gaps, and understand competition. Used to establish supply/demand gap before committing to a business idea.</p>
+<p><strong>Business Idea Generation:</strong> The formal process of generating, screening, and selecting business ideas culminating in a viable venture concept.</p>`,
+      formulas:[],
+      example:`<strong>SWOT Example:</strong> A student wants to start a mobile phone repair business in a university town.<br>S: Technical skills in phone repair, low startup cost<br>W: Limited capital, no registered business yet<br>O: Large student population with smartphone needs, no nearby competitor<br>T: Rapid changes in phone technology, competition from big repair centres in city`,
+      youtube:'https://www.youtube.com/results?search_query=generating+business+ideas+entrepreneurship+SWOT+analysis'
+    },
+    {
+      id:'eed216-2', num:'2.0', name:'Evaluating a Business Idea — Business Plan',
+      notes:`<p>After generating a business idea, the next step is to evaluate its feasibility and develop a detailed plan before committing resources.</p>
+<p><strong>Business Plan:</strong> A formal written document that outlines the goals, strategies, market analysis, financial projections, and operational plan for a business. Serves as a roadmap and is required when seeking funding.</p>
+<p><strong>Stages of Business Idea Evaluation:</strong></p>
+<ol style="padding-left:18px">
+<li><strong>Preliminary Project Proposal:</strong> Initial 1–2 page outline: what is the business, who are the customers, what is the estimated cost?</li>
+<li><strong>Pre-Feasibility Study:</strong> A quick, low-cost study to assess whether the idea is worth investing in a full feasibility study. Examines market, technical, financial, and managerial aspects broadly.</li>
+<li><strong>Detailed Feasibility Study (Business Plan):</strong> Thorough analysis of all aspects: market demand and competition, technical requirements (equipment, location, raw materials), financial viability (costs, revenue, profit), management structure.</li>
+</ol>
+<p><strong>Key components of a Business Plan:</strong> Executive Summary, Company Description, Market Analysis, Products/Services Description, Marketing Strategy, Operational Plan, Management Team, Financial Plan (income statement projections, cash flow, balance sheet).</p>`,
+      formulas:[
+        {name:'Break-even point (units)', f:'BEP = Fixed Costs / (Selling Price − Variable Cost per unit)'},
+        {name:'Break-even point (revenue)', f:'BEP (₦) = Fixed Costs / Contribution Margin Ratio'},
+        {name:'Contribution margin', f:'CM = Selling Price − Variable Cost per unit'},
+        {name:'Profit', f:'Profit = Total Revenue − Total Cost = TR − (FC + VC)'},
+        {name:'Return on Investment (ROI)', f:'ROI = (Net Profit / Total Investment) × 100%'}
+      ],
+      example:`<strong>Break-even Example:</strong> A tailoring business has FC=₦50,000/month, Variable cost=₦2,000/outfit, Selling price=₦7,000/outfit.<br>CM = 7,000 − 2,000 = ₦5,000<br>BEP = 50,000 / 5,000 = 10 outfits/month<br>Must sell at least 10 outfits monthly to break even.`,
+      youtube:'https://www.youtube.com/results?search_query=business+plan+feasibility+study+entrepreneurship'
+    },
+    {
+      id:'eed216-3', num:'3.0', name:'Product/Service Selection',
+      notes:`<p><strong>Product/Service Selection</strong> is the process of choosing what to produce or offer based on a systematic evaluation of various factors. A good selection decision is critical to business success.</p>
+<p><strong>Product Selection Criteria:</strong> Market demand, profitability potential, available technology, raw material availability, entrepreneur's skills, competition level.</p>
+<p><strong>Key Factors in Product/Service Selection:</strong></p>
+<ul>
+<li><strong>Infrastructure:</strong> Availability of electricity, roads, water — affects feasibility of production</li>
+<li><strong>Technology:</strong> Available and affordable equipment and production methods</li>
+<li><strong>Availability of Raw Materials:</strong> Proximity, reliability, and cost of inputs</li>
+<li><strong>Government Policy/Regulation:</strong> Tax incentives, import restrictions, banned products, health/safety regulations</li>
+<li><strong>Legal Aspects:</strong> Patents, trademarks, product liability, environmental laws</li>
+</ul>
+<p><strong>Preliminary Screening:</strong> Quick rejection of clearly infeasible ideas (illegal products, no market demand, prohibitive cost) to focus resources on promising options.</p>
+<p><strong>Pre-feasibility Study:</strong> A brief analysis confirming there is prima facie reason to proceed. Not as detailed as full feasibility but more rigorous than preliminary screening.</p>`,
+      formulas:[],
+      example:`<strong>Example:</strong> A student selects between three business ideas: (1) sachet water production, (2) poultry farming, (3) phone repair. Uses a scoring matrix:<br>Each idea scored 1–5 on: Capital required (inverse), market demand, available skills, technology access, raw material availability, competition. The idea with highest total score is selected.`,
+      youtube:'https://www.youtube.com/results?search_query=product+service+selection+feasibility+study+entrepreneurship'
+    },
+    {
+      id:'eed216-4', num:'4.0', name:'Process and Procedure for Starting an Enterprise',
+      notes:`<p>Starting a formal business in Nigeria requires legal registration and compliance with relevant laws.</p>
+<p><strong>Companies and Allied Matters Act (CAMA) 1990 (as amended):</strong> The principal law governing companies and business names in Nigeria. Has undergone significant amendments including CAMA 2020.</p>
+<p><strong>Corporate Affairs Commission (CAC):</strong> The body established by CAMA to regulate the formation and management of companies and registration of business names in Nigeria.</p>
+<p><strong>Legal Structures of Business:</strong></p>
+<ul>
+<li><strong>Sole Proprietorship:</strong> Owned and run by one person. Easy to set up. Unlimited personal liability.</li>
+<li><strong>Partnership:</strong> Two or more persons. Governed by Partnership Act. Joint liability.</li>
+<li><strong>Private Limited Company (Ltd):</strong> Shareholders have limited liability. Minimum 2, maximum 50 shareholders. Cannot publicly offer shares.</li>
+<li><strong>Public Limited Company (Plc):</strong> Can offer shares to public. Minimum 7 shareholders. Listed on stock exchange.</li>
+</ul>
+<p><strong>Steps to register a business in Nigeria:</strong></p>
+<ol style="padding-left:18px">
+<li>Choose a business name (must be unique)</li>
+<li>Name search and reservation with CAC</li>
+<li>Complete registration forms</li>
+<li>Pay prescribed fees</li>
+<li>Submit memorandum and articles of association (for companies)</li>
+<li>Obtain Certificate of Incorporation</li>
+<li>Register for Tax (FIRS) and obtain TIN</li>
+</ol>`,
+      formulas:[],
+      example:`<strong>Example:</strong> Registering a private company "StatPro Analytics Ltd" with CAC:<br>1. Conduct name search on CAC portal → name is available<br>2. Reserve name for 60 days<br>3. Prepare Memorandum of Association (business objectives) and Articles of Association (internal rules)<br>4. Pay CAC registration fees<br>5. Submit documents → CAC issues Certificate of Incorporation<br>6. Company can now legally operate, open bank account, hire staff`,
+      youtube:'https://www.youtube.com/results?search_query=how+to+register+a+business+Nigeria+CAC+CAMA'
+    },
+    {
+      id:'eed216-5', num:'5.0', name:'Operational Techniques — Managing an Enterprise',
+      notes:`<p>Once a business is registered, effective management is needed for it to survive and grow. Management is the process of planning, organizing, staffing, leading, and controlling resources to achieve organisational goals.</p>
+<p><strong>Functions of Management (POLSDC):</strong></p>
+<ul>
+<li><strong>Planning:</strong> Setting objectives and determining courses of action to achieve them. Includes strategic plan (long-term), tactical (medium-term), and operational plans (short-term).</li>
+<li><strong>Organising:</strong> Arranging resources and tasks to achieve objectives. Creating organizational structure, dividing work, delegating authority.</li>
+<li><strong>Staffing:</strong> Recruiting, selecting, training, appraising, and compensating employees.</li>
+<li><strong>Leading/Directing:</strong> Motivating and guiding employees. Leadership styles: autocratic, democratic, laissez-faire.</li>
+<li><strong>Controlling:</strong> Monitoring performance against plans, identifying deviations, and taking corrective actions.</li>
+</ul>
+<p><strong>Marketing techniques:</strong> Identify target market, set competitive price, choose distribution channels (direct/indirect), promote through advertising, social media, word-of-mouth.</p>
+<p><strong>Record keeping and financial management:</strong> Maintain cash book, ledger, sales register. Prepare income statement and balance sheet. Essential for tax compliance and business decisions.</p>`,
+      formulas:[
+        {name:'Gross Profit', f:'Gross Profit = Sales Revenue − Cost of Goods Sold (COGS)'},
+        {name:'Net Profit', f:'Net Profit = Gross Profit − Operating Expenses'},
+        {name:'Gross Profit Margin', f:'GPM = (Gross Profit / Sales) × 100%'},
+        {name:'Net Profit Margin', f:'NPM = (Net Profit / Sales) × 100%'},
+        {name:'Current Ratio (liquidity)', f:'Current Ratio = Current Assets / Current Liabilities'},
+        {name:'Working Capital', f:'Working Capital = Current Assets − Current Liabilities'}
+      ],
+      example:`<strong>Example:</strong> A small trading business: Sales=₦500,000, COGS=₦300,000, Operating Expenses=₦80,000.<br>Gross Profit = 500,000 − 300,000 = ₦200,000 (GPM = 40%)<br>Net Profit = 200,000 − 80,000 = ₦120,000 (NPM = 24%)<br>Every ₦1 of sales generates 24 kobo of net profit.`,
+      youtube:'https://www.youtube.com/results?search_query=managing+enterprise+management+functions+entrepreneurship'
+    },
+    {
+      id:'eed216-6', num:'6.0', name:'Industries, Support Agencies and Roles of Banks',
+      notes:`<p><strong>Industries and Support Agencies in Nigeria</strong> provide infrastructure, technical assistance, finance, and other services to support businesses, especially Small and Medium Enterprises (SMEs).</p>
+<p><strong>Types of Industries:</strong></p>
+<ul>
+<li><strong>Manufacturing:</strong> Convert raw materials into finished products (textiles, food processing, plastics)</li>
+<li><strong>Service:</strong> Provide intangible services (banking, education, transport, healthcare)</li>
+<li><strong>Agriculture:</strong> Farming, livestock, fishery, forestry</li>
+<li><strong>Extractive:</strong> Mining, quarrying, oil and gas</li>
+</ul>
+<p><strong>Support Agencies for SMEs in Nigeria:</strong> SMEDAN (Small and Medium Enterprise Development Agency of Nigeria), NAFDAC, SON (Standards Organisation of Nigeria), ITF (Industrial Training Fund), NACRDB, BOI (Bank of Industry).</p>
+<p><strong>Role of Banks in Enterprise Development:</strong></p>
+<ul>
+<li><strong>Commercial Banks:</strong> Provide working capital loans, overdrafts, trade finance</li>
+<li><strong>Development Banks (BOI, NEXIM):</strong> Long-term project financing at concessional rates for industrial development</li>
+<li><strong>Microfinance Banks:</strong> Small, collateral-free loans for micro enterprises and informal sector</li>
+<li><strong>Capital Markets (Stock Exchange):</strong> Provide long-term equity and debt capital for larger companies</li>
+</ul>`,
+      formulas:[
+        {name:'Simple Interest', f:'I = PRT/100\n(P=Principal, R=Rate%, T=Time in years)'},
+        {name:'Amount (simple interest)', f:'A = P + I = P(1 + RT/100)'},
+        {name:'Compound Interest Amount', f:'A = P(1 + r/n)^(nt)\n(r=annual rate, n=compounds/year, t=years)'},
+        {name:'Compound Interest earned', f:'I = A − P = P[(1+r/n)^(nt) − 1]'},
+        {name:'Effective annual rate', f:'EAR = (1 + r/n)ⁿ − 1'}
+      ],
+      example:`<strong>Example (BOI Loan):</strong> A small food processing company borrows ₦2,000,000 from BOI at 9% p.a. simple interest for 3 years.<br>I = (2,000,000 × 9 × 3)/100 = ₦540,000<br>Total repayable = 2,000,000 + 540,000 = ₦2,540,000`,
+      youtube:'https://www.youtube.com/results?search_query=SME+support+agencies+Nigeria+bank+roles+entrepreneurship'
+    },
+    {
+      id:'eed216-7', num:'7.0–8.0', name:'Personal Savings, Portfolio Investment and National Development',
+      notes:`<p><strong>Income, Expenditure, and Savings:</strong></p>
+<ul>
+<li><strong>Income:</strong> All earnings received — wages, salaries, business profit, rent, dividends, interest.</li>
+<li><strong>Expenditure:</strong> All money spent — consumption of goods, services, taxes, and savings.</li>
+<li><strong>Savings:</strong> Income not spent on current consumption: Savings = Income − Expenditure.</li>
+</ul>
+<p><strong>Role of Savings:</strong> Pool of funds available for investment; funds businesses and infrastructure; reduces dependence on foreign capital; builds personal financial security.</p>
+<p><strong>Portfolio Investment:</strong> Investing savings in financial assets rather than in a business you manage directly. The portfolio is the collection of investments held.</p>
+<p><strong>Types of Portfolio Investments:</strong></p>
+<ul>
+<li><strong>Shares (Equities):</strong> Ownership stake in a company. Returns via dividends and capital gains. Higher risk, higher potential return.</li>
+<li><strong>Bonds (Fixed Income):</strong> Debt instruments issued by companies or government. Fixed interest (coupon) payments. Lower risk than equities.</li>
+<li><strong>Debentures:</strong> Unsecured bonds. Issued by companies. Higher risk than secured bonds.</li>
+<li><strong>Treasury Bills:</strong> Short-term government debt. Very low risk.</li>
+<li><strong>Mutual Funds:</strong> Pooled investment vehicles managed by professionals.</li>
+</ul>
+<p><strong>National Economic Development:</strong> Aggregate savings fund national investment. Higher savings rate → more capital available for business expansion, infrastructure, job creation → higher GDP growth.</p>`,
+      formulas:[
+        {name:'Savings equation', f:'Savings = Income − Expenditure'},
+        {name:'Simple interest on savings', f:'Interest = P × R × T / 100'},
+        {name:'Dividend yield', f:'Dividend Yield = (Annual Dividend per Share / Share Price) × 100%'},
+        {name:'Capital gain/loss', f:'Capital Gain = Selling Price − Purchase Price'},
+        {name:'Total return on investment', f:'Total Return = (Dividend + Capital Gain) / Purchase Price × 100%'},
+        {name:'Bond pricing (simple)', f:'Bond Price = Σ [Coupon / (1+r)ᵗ] + [Face Value / (1+r)ⁿ]'},
+        {name:'Savings multiplier effect', f:'National Investment = Aggregate Savings × Multiplier'}
+      ],
+      example:`<strong>Example (Shares vs Bonds):</strong> You invest ₦100,000 in company shares. After 1 year: dividend received = ₦8,000; share price rose from ₦10 to ₦11.50 per share (bought 10,000 shares).<br>Capital gain = (11.50−10) × 10,000 = ₦15,000<br>Total return = (8,000+15,000)/100,000 × 100% = 23%<br><br>Alternatively, ₦100,000 in bonds at 12% p.a. → return = ₦12,000 (12%) with much lower risk.`,
+      youtube:'https://www.youtube.com/results?search_query=personal+savings+portfolio+investment+shares+bonds+entrepreneurship'
+    }
+  ]
+}
+];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let state = {
+  currentPage: 'home',
+  currentCourseId: null,
+  prevMainPage: 'home',
+  navStack: [],
+  bookmarks: JSON.parse(localStorage.getItem('pl_bookmarks') || '[]'),
+  recents: JSON.parse(localStorage.getItem('pl_recents') || '[]'),
+  settings: JSON.parse(localStorage.getItem('pl_settings') || '{"theme":"dark","color":"cyan","font":"inter"}')
+};
+
+// ── Apply saved settings immediately (before render) ──
+(function applySettings() {
+  const s = state.settings;
+  document.documentElement.setAttribute('data-theme', s.theme || 'dark');
+  if (s.color && s.color !== 'cyan') document.documentElement.setAttribute('data-color', s.color);
+  const font = s.font || 'inter';
+  if (font !== 'inter') document.documentElement.setAttribute('data-font', font);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === (s.theme||'dark')));
+  document.querySelectorAll('.color-btn').forEach(b => b.classList.toggle('active', b.dataset.color === (s.color||'cyan')));
+  document.querySelectorAll('.font-btn').forEach(b => b.classList.toggle('active', b.dataset.font === font));
+})();
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+const MAIN_PAGES = ['home','search','bookmarks','formulas','settings'];
+
+function navTo(page) {
+  if (MAIN_PAGES.includes(state.currentPage)) state.prevMainPage = state.currentPage;
+  if (MAIN_PAGES.includes(page)) {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+    state.navStack = [];
+  }
+  _showPage(page);
+}
+
+function _showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  document.getElementById('mainScroll').scrollTop = 0;
+  state.currentPage = page;
+  if (page === 'bookmarks') renderBookmarks();
+  if (page === 'formulas') renderFormulaHub();
+  if (page === 'search') setTimeout(() => document.getElementById('searchInput').focus(), 100);
+}
+
+// ═══════════════════════════════════════════════════════════
+// RECENTS SYSTEM
+// ═══════════════════════════════════════════════════════════
+const MAX_RECENTS = 6;
+
+function addRecent(type, courseId, topicId) {
+  const course = COURSES.find(c => c.id === courseId);
+  if (!course) return;
+  const entry = {
+    type, courseId, topicId: topicId || null,
+    code: course.code,
+    name: topicId ? (course.topics.find(t => t.id === topicId)?.name || course.name) : course.name,
+    icon: course.icon,
+    ts: Date.now()
+  };
+  // Remove duplicate
+  state.recents = state.recents.filter(r =>
+    !(r.courseId === courseId && r.topicId === topicId)
+  );
+  state.recents.unshift(entry);
+  if (state.recents.length > MAX_RECENTS) state.recents = state.recents.slice(0, MAX_RECENTS);
+  localStorage.setItem('pl_recents', JSON.stringify(state.recents));
+  if (state.currentPage === 'home') renderRecents();
+}
+
+function clearRecents() {
+  state.recents = [];
+  localStorage.setItem('pl_recents', JSON.stringify([]));
+  renderRecents();
+}
+
+function timeAgo(ts) {
+  const diff = (Date.now() - ts) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  return Math.floor(diff/86400) + 'd ago';
+}
+
+function renderRecents() {
+  const el = document.getElementById('recentsContainer');
+  if (!state.recents.length) {
+    el.innerHTML = `<div class="recents-empty">Open a course to start tracking</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="recents-scroll">` +
+    state.recents.map(r => `
+      <div class="recent-card" onclick="${r.topicId ? `openTopic('${r.courseId}','${r.topicId}')` : `openCourse('${r.courseId}')`}">
+        <div class="recent-icon">${r.icon}</div>
+        <div class="recent-code">${r.code}</div>
+        <div class="recent-name">${r.name}</div>
+        <div class="recent-time">${timeAgo(r.ts)}</div>
+      </div>
+    `).join('') +
+  `</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// HOME RENDER
+// ═══════════════════════════════════════════════════════════
+function renderHome() {
+  const list = document.getElementById('courseList');
+  list.innerHTML = COURSES.map(c => `
+    <div class="course-card" onclick="openCourse('${c.id}')">
+      <div class="course-icon">${c.icon}</div>
+      <div class="course-info">
+        <div class="course-code">${c.code}</div>
+        <div class="course-name">${c.name}</div>
+        <div class="course-meta"><span>${c.duration}</span><span>·</span><span>${c.topics.length} topics</span><span>·</span><span>${c.unit} units</span></div>
+      </div>
+      <div class="course-arrow">›</div>
+    </div>
+  `).join('');
+
+  const totalTopics = COURSES.reduce((a,c) => a + c.topics.length, 0);
+  const totalFormulas = COURSES.reduce((a,c) => a + c.topics.reduce((b,t) => b + (t.formulas||[]).length, 0), 0);
+  document.getElementById('statCourses').textContent = COURSES.length;
+  document.getElementById('statTopics').textContent = totalTopics;
+  document.getElementById('statFormulas').textContent = totalFormulas;
+
+  renderRecents();
+
+  // Sidebar
+  const sb = document.getElementById('sidebarCourseList');
+  sb.innerHTML = COURSES.map(c => `
+    <div class="sidebar-course-item" onclick="openCourse('${c.id}');closeSidebar()">
+      <div class="sidebar-code">${c.code}</div>
+      <div class="sidebar-name">${c.name}</div>
+    </div>
+  `).join('');
+
+  // iOS install hint
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !navigator.standalone) {
+    document.getElementById('iosInstallHint').style.display = 'block';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// COURSE PAGE
+// ═══════════════════════════════════════════════════════════
+function openCourse(courseId, fromPage) {
+  state.currentCourseId = courseId;
+  const course = COURSES.find(c => c.id === courseId);
+  if (!course) return;
+
+  const origin = fromPage || state.currentPage;
+  state.navStack = [{ page: origin }];
+
+  addRecent('course', courseId, null);
+
+  document.getElementById('courseHeaderCard').innerHTML = `
+    <div class="course-header-card">
+      <div class="course-header-code">${course.code}</div>
+      <div class="course-header-title">${course.name}</div>
+      <p class="course-header-goal">${course.goal}</p>
+      <div class="meta-row">
+        <span class="meta-badge">⏱ ${course.duration}</span>
+        <span class="meta-badge">📚 ${course.unit} Units</span>
+        <span class="meta-badge">📋 ${course.topics.length} Topics</span>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('topicsList').innerHTML = course.topics.map(t => {
+    const saved = state.bookmarks.includes(t.id);
+    return `
+      <div class="topic-item" onclick="openTopic('${course.id}','${t.id}')">
+        <div style="flex:1;min-width:0">
+          <div class="topic-num">TOPIC ${t.num}</div>
+          <div class="topic-name">${t.name}</div>
+        </div>
+        <div class="topic-right">
+          <button class="bookmark-btn ${saved?'saved':''}" onclick="event.stopPropagation();toggleBookmark('${t.id}',this)">${saved?'★':'☆'}</button>
+          <span style="color:var(--text3);font-size:18px">›</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('backFromCourse').onclick = () => {
+    const origin = state.navStack[0];
+    if (origin && MAIN_PAGES.includes(origin.page)) navTo(origin.page);
+    else navTo('home');
+  };
+
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  _showPage('course');
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOPIC DETAIL
+// ═══════════════════════════════════════════════════════════
+function openTopic(courseId, topicId) {
+  const course = COURSES.find(c => c.id === courseId);
+  const topic = course?.topics.find(t => t.id === topicId);
+  if (!topic) return;
+  state.currentTopicId = topicId;
+  if (!state.navStack.find(x => x.page === 'course')) state.navStack.push({ page: 'course', courseId });
+
+  addRecent('topic', courseId, topicId);
+
+  const saved = state.bookmarks.includes(topic.id);
+  const originPage = state.navStack[0];
+  let backLabel = 'Home', backAction = "navTo('home')";
+  if (originPage) {
+    if (originPage.page === 'search') { backLabel = 'Search'; backAction = "navTo('search')"; }
+    else if (originPage.page === 'bookmarks') { backLabel = 'Bookmarks'; backAction = "navTo('bookmarks')"; }
+    else if (originPage.page === 'formulas') { backLabel = 'Formulas'; backAction = "navTo('formulas')"; }
+    else if (originPage.page === 'formula-course') { backLabel = 'Formulas'; backAction = "openFormulaCourse('"+courseId+"')"; }
+  }
+
+  document.getElementById('topicBreadcrumb').innerHTML = `
+    <span class="breadcrumb-link" onclick="${backAction}">${backLabel}</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-link" onclick="openCourse('${courseId}')">${course.code}</span>
+    <span class="breadcrumb-sep">›</span>
+    <span style="color:var(--text2)">${topic.name}</span>
+  `;
+
+  let formulasHTML = '';
+  if (topic.formulas && topic.formulas.length) {
+    formulasHTML = `<div class="content-section"><div class="content-section-title">📐 Formulas</div>` +
+      topic.formulas.map(f => `
+        <div class="formula-wrap">
+          <div class="formula-header">
+            <span class="formula-label-text">${f.name}</span>
+            <button class="copy-btn" onclick="copyFormula(this,'${escHtml(f.f)}')" aria-label="Copy">Copy</button>
+          </div>
+          <div class="formula-text">${escHtml(f.f)}</div>
+        </div>
+      `).join('') +
+    `</div>`;
+  }
+
+  let exampleHTML = topic.example ? `
+    <div class="content-section">
+      <div class="content-section-title">✏️ Worked Example</div>
+      <div class="example-box"><div class="example-text">${topic.example}</div></div>
+    </div>` : '';
+
+  document.getElementById('topicContent').innerHTML = `
+    <div class="topic-header-card">
+      <div class="topic-badge">${course.code} · Topic ${topic.num}</div>
+      <h1 class="topic-title">${topic.name}</h1>
+    </div>
+    <div class="content-section">
+      <div class="content-section-title">📖 Notes</div>
+      <div class="content-body">${topic.notes}</div>
+    </div>
+    ${formulasHTML}
+    ${exampleHTML}
+    <div class="content-section">
+      <div class="content-section-title">🎥 Video Lesson</div>
+      <a class="yt-btn" href="${topic.youtube}" target="_blank" rel="noopener noreferrer">
+        <span class="yt-icon">▶</span> Watch Explanation
+      </a>
+      <p style="font-size:11px;color:var(--text3);margin-top:7px;text-align:center">Opens YouTube — no embedding</p>
+    </div>
+    <div class="topic-action-row">
+      <button class="action-btn" onclick="openCourse('${courseId}')">← All Topics</button>
+      <button class="action-btn primary" id="topicBmBtn" onclick="toggleBookmark('${topic.id}',this)">${saved?'★ Saved':'☆ Save'}</button>
+    </div>
+  `;
+
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  _showPage('topic');
+}
+
+// ═══════════════════════════════════════════════════════════
+// COPY FORMULA
+// ═══════════════════════════════════════════════════════════
+function copyFormula(btn, formulaText) {
+  const text = formulaText.replace(/\n/g, '\n');
+  const doFeedback = () => {
+    const origText = btn.textContent;
+    btn.textContent = '✓'; btn.classList.add('copied');
+    const t = document.getElementById('copyToast');
+    t.classList.add('show');
+    setTimeout(() => { t.classList.remove('show'); btn.textContent = origText; btn.classList.remove('copied'); }, 2000);
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(doFeedback).catch(() => fallbackCopy(text, doFeedback));
+  } else { fallbackCopy(text, doFeedback); }
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e){}
+  document.body.removeChild(ta);
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ═══════════════════════════════════════════════════════════
+// BOOKMARKS
+// ═══════════════════════════════════════════════════════════
+function toggleBookmark(topicId, btnEl) {
+  const idx = state.bookmarks.indexOf(topicId);
+  if (idx === -1) {
+    state.bookmarks.push(topicId);
+    if (btnEl) { btnEl.textContent = btnEl.classList.contains('bookmark-btn') ? '★' : '★ Saved'; btnEl.classList.add('saved'); }
+  } else {
+    state.bookmarks.splice(idx, 1);
+    if (btnEl) { btnEl.textContent = btnEl.classList.contains('bookmark-btn') ? '☆' : '☆ Save'; btnEl.classList.remove('saved'); }
+  }
+  localStorage.setItem('pl_bookmarks', JSON.stringify(state.bookmarks));
+}
+function renderBookmarks() {
+  const el = document.getElementById('bookmarksList');
+  if (!state.bookmarks.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">⭐</div><div class="empty-title">No Saved Topics</div><div class="empty-sub">Tap ☆ on any topic to save it here.</div></div>`;
+    return;
+  }
+  let html = '';
+  for (const bid of state.bookmarks) {
+    for (const course of COURSES) {
+      const topic = course.topics.find(t => t.id === bid);
+      if (topic) {
+        html += `
+          <div class="topic-item" onclick="openTopicFrom('${course.id}','${topic.id}','bookmarks')" style="margin-bottom:8px">
+            <div style="flex:1;min-width:0"><div class="topic-num">${course.code} · ${topic.num}</div><div class="topic-name">${topic.name}</div></div>
+            <div class="topic-right">
+              <button class="bookmark-btn saved" onclick="event.stopPropagation();toggleBookmark('${topic.id}',this);renderBookmarks()">★</button>
+              <span style="color:var(--text3);font-size:18px">›</span>
+            </div>
+          </div>`;
+      }
+    }
+  }
+  el.innerHTML = html;
+}
+function openTopicFrom(courseId, topicId, fromPage) {
+  state.navStack = [{ page: fromPage }];
+  openTopic(courseId, topicId);
+}
+
+// ═══════════════════════════════════════════════════════════
+// FORMULA HUB — Course cards → drill into course formulas
+// ═══════════════════════════════════════════════════════════
+function renderFormulaHub(filter) {
+  const q = (filter || '').toLowerCase().trim();
+  const el = document.getElementById('formulasList');
+  let html = '';
+  for (const course of COURSES) {
+    const allFormulas = course.topics.flatMap(t =>
+      (t.formulas||[]).filter(f =>
+        !q || f.name.toLowerCase().includes(q) || f.f.toLowerCase().includes(q) ||
+        course.code.toLowerCase().includes(q) || course.name.toLowerCase().includes(q) ||
+        t.name.toLowerCase().includes(q)
+      ).map(f => ({...f, topicName:t.name, topicId:t.id}))
+    );
+    if (!allFormulas.length) continue;
+    html += `
+      <div class="fhub-course-card" onclick="openFormulaCourse('${course.id}')">
+        <div class="fhub-course-header">
+          <span class="fhub-course-icon">${course.icon}</span>
+          <div style="flex:1;min-width:0">
+            <div class="fhub-course-code">${course.code}</div>
+            <div class="fhub-course-name">${course.name}</div>
+          </div>
+          <span class="fhub-count">${allFormulas.length}</span>
+          <span class="fhub-chevron">›</span>
+        </div>
+      </div>`;
+  }
+  el.innerHTML = html || `<div class="search-empty"><div class="search-empty-icon">📐</div><div>No formulas found</div></div>`;
+}
+
+function openFormulaCourse(courseId) {
+  const course = COURSES.find(c => c.id === courseId);
+  if (!course) return;
+  state.navStack = [{ page: 'formulas' }];
+
+  document.getElementById('formulaCourseHeader').innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border-accent);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-md)">
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:600;letter-spacing:1.5px;margin-bottom:4px">${course.code}</div>
+      <div style="font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--text)">${course.name} — Formulas</div>
+    </div>`;
+
+  let html = '';
+  for (const topic of course.topics) {
+    if (!topic.formulas?.length) continue;
+    html += `<div class="fhub-topic-block">
+      <div class="fhub-topic-label" onclick="openTopicFrom('${course.id}','${topic.id}','formula-course')">${topic.name}</div>` +
+      topic.formulas.map(f => `
+        <div class="fhub-formula-item">
+          <div class="fhub-formula-name">
+            <span>${f.name}</span>
+            <button class="fhub-copy-btn" onclick="event.stopPropagation();copyFormula(this,'${escHtml(f.f)}')" aria-label="copy">Copy</button>
+          </div>
+          <div class="fhub-formula-text" onclick="openTopicFrom('${course.id}','${topic.id}','formula-course')">${escHtml(f.f)}</div>
+        </div>
+      `).join('') +
+    `</div>`;
+  }
+  document.getElementById('formulaCourseContent').innerHTML = html || `<div class="search-empty"><div>No formulas in this course</div></div>`;
+
+  document.getElementById('backFromFormulaCourse').onclick = () => navTo('formulas');
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-page="formulas"]').classList.add('active');
+  _showPage('formula-course');
+}
+
+document.getElementById('formulaSearch').addEventListener('input', function() {
+  renderFormulaHub(this.value);
+});
+
+// ═══════════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════════
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  const el = document.getElementById('searchResults');
+  if (!q) {
+    el.innerHTML = `<div class="search-empty"><div class="search-empty-icon">🔎</div><div>Type to search</div></div>`;
+    return;
+  }
+  const results = []; const seen = new Set();
+  for (const course of COURSES) {
+    if (course.name.toLowerCase().includes(q) || course.code.toLowerCase().includes(q)) {
+      const k = 'c:'+course.id;
+      if (!seen.has(k)) { seen.add(k); results.push({type:'Course', title:course.name, sub:course.code+' · '+course.duration, action:()=>openCourse(course.id,'search')}); }
+    }
+    for (const topic of course.topics) {
+      const tk = 't:'+topic.id;
+      if (topic.name.toLowerCase().includes(q) || topic.notes.toLowerCase().includes(q)) {
+        if (!seen.has(tk)) { seen.add(tk); results.push({type:'Topic', title:topic.name, sub:course.code+' · Topic '+topic.num, action:()=>openTopicFrom(course.id,topic.id,'search')}); }
+      }
+      (topic.formulas||[]).forEach((f,fi) => {
+        if (f.name.toLowerCase().includes(q) || f.f.toLowerCase().includes(q)) {
+          const fk = 'f:'+topic.id+fi;
+          if (!seen.has(fk)) { seen.add(fk); results.push({type:'Formula', title:f.name, sub:f.f.split('\n')[0].substring(0,55), action:()=>openTopicFrom(course.id,topic.id,'search')}); }
+        }
+      });
+    }
+  }
+  if (!results.length) {
+    el.innerHTML = `<div class="search-empty"><div class="search-empty-icon">😕</div><div>No results for "${this.value}"</div></div>`;
+    return;
+  }
+  el.innerHTML = results.slice(0,30).map((r,i) => `
+    <div class="result-item" id="ri${i}">
+      <div class="result-type">${r.type}</div>
+      <div class="result-title">${r.title}</div>
+      <div class="result-sub">${r.sub}</div>
+    </div>`).join('');
+  results.slice(0,30).forEach((r,i) => document.getElementById('ri'+i).addEventListener('click', r.action));
+});
+
+// ═══════════════════════════════════════════════════════════
+// SETTINGS (all preserved)
+// ═══════════════════════════════════════════════════════════
+function setTheme(mode) {
+  state.settings.theme = mode;
+  document.documentElement.setAttribute('data-theme', mode);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  saveSettings();
+}
+function setColor(color) {
+  state.settings.color = color;
+  if (color === 'cyan') document.documentElement.removeAttribute('data-color');
+  else document.documentElement.setAttribute('data-color', color);
+  document.querySelectorAll('.color-btn').forEach(b => b.classList.toggle('active', b.dataset.color === color));
+  saveSettings();
+}
+function setFont(font) {
+  state.settings.font = font;
+  if (font === 'inter') { document.documentElement.removeAttribute('data-font'); }
+  else { document.documentElement.setAttribute('data-font', font); }
+  document.querySelectorAll('.font-btn').forEach(b => b.classList.toggle('active', b.dataset.font === font));
+  saveSettings();
+}
+function saveSettings() { localStorage.setItem('pl_settings', JSON.stringify(state.settings)); }
+function resetSettings() {
+  state.settings = {theme:'dark', color:'cyan', font:'inter'};
+  setTheme('dark'); setColor('cyan'); setFont('inter');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════════
+document.getElementById('sidebarToggle').onclick = function() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+};
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════
+// OFFLINE
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('offline', () => {
+  const t = document.getElementById('offlineToast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 5000);
+});
+window.addEventListener('online', () => {
+  const t = document.getElementById('offlineToast');
+  t.textContent = '✅ Back online'; t.style.color = '#86efac'; t.classList.add('show');
+  setTimeout(() => { t.classList.remove('show'); t.textContent = '📡 You\'re offline'; t.style.color = ''; }, 3000);
+});
+
+// ═══════════════════════════════════════════════════════════
+// PWA INSTALL
+// ═══════════════════════════════════════════════════════════
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); deferredPrompt = e;
+  if (!localStorage.getItem('pl_install_dismissed')) {
+    document.getElementById('installBanner').classList.add('visible');
+  }
+});
+function triggerInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => { deferredPrompt = null; dismissInstall(); });
+}
+function dismissInstall() {
+  document.getElementById('installBanner').classList.remove('visible');
+  localStorage.setItem('pl_install_dismissed', '1');
+}
+window.addEventListener('appinstalled', dismissInstall);
+
+// ═══════════════════════════════════════════════════════════
+// SMART GREETING
+// ═══════════════════════════════════════════════════════════
+function showGreeting() {
+  const h = new Date().getHours();
+  const greetings = {
+    morning: [
+      {e:'☀️', t:'Good morning! Ready to study?'},
+      {e:'🌅', t:'Morning! Let\'s crush today\'s goals.'},
+      {e:'☕', t:'Good morning — notes are ready!'},
+      {e:'📚', t:'Rise and study! You got this.'},
+      {e:'🌤️', t:'Morning grind starts now. Let\'s go!'},
+      {e:'🧠', t:'Fresh mind, fresh notes. Good morning!'},
+      {e:'🔥', t:'Another day, another W. Morning!'},
+      {e:'💪', t:'Up early and ready — that\'s the spirit!'},
+    ],
+    afternoon: [
+      {e:'📖', t:'Good afternoon, keep it up!'},
+      {e:'💡', t:'Afternoon study session — let\'s go!'},
+      {e:'🎯', t:'Keep pushing, you\'re doing great!'},
+      {e:'📝', t:'Great time to review some formulas.'},
+      {e:'⚡', t:'Afternoon energy — use it wisely!'},
+      {e:'🏆', t:'Halfway through the day, still grinding!'},
+      {e:'🧩', t:'Piece by piece — you\'re getting there!'},
+      {e:'📐', t:'Good afternoon! Stats won\'t solve itself.'},
+    ],
+    evening: [
+      {e:'🌆', t:'Good evening! Evening revision?'},
+      {e:'🌇', t:'Evening is great for deep reading.'},
+      {e:'✨', t:'Evening study — consistency wins!'},
+      {e:'📓', t:'Good evening, let\'s revise!'},
+      {e:'🌃', t:'Evening session loading... you\'re here!'},
+      {e:'🎧', t:'Wind down with some revision. Good evening!'},
+      {e:'🕯️', t:'Evening focus hits different. Let\'s go!'},
+      {e:'📊', t:'Good evening — charts and notes await!'},
+    ],
+    night: [
+      {e:'🌙', t:'Late-night study session. Respect!'},
+      {e:'⭐', t:'Burning the midnight oil? Nice.'},
+      {e:'🦉', t:'Night owl studying — legend!'},
+      {e:'🌌', t:'Stars are out, books are open!'},
+      {e:'😤', t:'Dedication after dark. Respect!'},
+      {e:'🛸', t:'Nobody studying this late but you. Legend.'},
+      {e:'🔭', t:'Late-night clarity hits different!'},
+      {e:'💎', t:'Diamonds are made under pressure. Keep going!'},
+    ]
+  };
+  let pool;
+  if (h >= 5 && h < 12) pool = greetings.morning;
+  else if (h >= 12 && h < 17) pool = greetings.afternoon;
+  else if (h >= 17 && h < 21) pool = greetings.evening;
+  else pool = greetings.night;
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById('greetingEmoji').textContent = pick.e;
+  document.getElementById('greetingText').textContent = pick.t;
+  const popup = document.getElementById('greetingPopup');
+  setTimeout(() => { popup.classList.add('show'); }, 600);
+  setTimeout(() => { popup.classList.remove('show'); }, 4500);
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+renderHome();
+showGreeting();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+</script>
+</body>
+</html>
